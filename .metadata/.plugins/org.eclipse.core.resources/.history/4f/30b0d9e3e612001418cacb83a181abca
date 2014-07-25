@@ -1,0 +1,13 @@
+package com.bloc.blocs;
+
+public class GamePiece {
+	
+	public static GamePiece getSharedInstance() {
+		
+	}
+	
+	private GamePiece() {
+		
+	}
+
+}

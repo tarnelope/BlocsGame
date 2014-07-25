@@ -1,0 +1,9 @@
+package com.bloc.blocs;
+
+public class GamePiece {
+	
+	public GamePiece() {
+		
+	}
+
+}

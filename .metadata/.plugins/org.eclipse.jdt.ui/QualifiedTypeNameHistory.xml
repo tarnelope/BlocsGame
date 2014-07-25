@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.w3c.dom.Node"/>
+<fullyQualifiedTypeName name="org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder.Node"/>
+<fullyQualifiedTypeName name="android.graphics.Camera"/>
+<fullyQualifiedTypeName name="org.andengine.ui.activity.BaseActivity"/>
+<fullyQualifiedTypeName name="org.andengine.entity.text.Text"/>
+<fullyQualifiedTypeName name="org.andengine.opengl.vbo.VertexBufferObjectManager"/>
+<fullyQualifiedTypeName name="org.andengine.util.texturepack.TexturePackLoader"/>
+<fullyQualifiedTypeName name="org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackLoader"/>
+<fullyQualifiedTypeName name="org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePack"/>
+<fullyQualifiedTypeName name="org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackTextureRegionLibrary"/>
+<fullyQualifiedTypeName name="org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException"/>
+<fullyQualifiedTypeName name="org.andengine.ui.activity.SimpleBaseGameActivity"/>
+<fullyQualifiedTypeName name="org.andengine.entity.scene.menu.item.IMenuItem"/>
+<fullyQualifiedTypeName name="org.andengine.entity.scene.menu.item.TextMenuItem"/>
+<fullyQualifiedTypeName name="org.andengine.entity.modifier.DelayModifier"/>
+<fullyQualifiedTypeName name="org.andengine.entity.modifier.IEntityModifier"/>
+<fullyQualifiedTypeName name="org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener"/>
+<fullyQualifiedTypeName name="org.andengine.entity.primitive.Rectangle"/>
+<fullyQualifiedTypeName name="android.hardware.SensorEventListener"/>
+<fullyQualifiedTypeName name="org.andengine.engine.handler.IUpdateHandler"/>
+<fullyQualifiedTypeName name="android.hardware.SensorManager"/>
+<fullyQualifiedTypeName name="com.bloc.blocs.SensorListener"/>
+<fullyQualifiedTypeName name="com.bloc.blocs.GameLoopUpdateHandler"/>
+<fullyQualifiedTypeName name="android.hardware.Sensor"/>
+<fullyQualifiedTypeName name="java.lang.Override"/>
+<fullyQualifiedTypeName name="org.andengine.engine.options.ScreenOrientation"/>
+<fullyQualifiedTypeName name="org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy"/>
+<fullyQualifiedTypeName name="android.transition.Scene"/>
+<fullyQualifiedTypeName name="org.andengine.entity.util.FPSLogger"/>
+<fullyQualifiedTypeName name="android.R.bool"/>
+<fullyQualifiedTypeName name="org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="com.bloc.blocs.R.string"/>
+<fullyQualifiedTypeName name="org.andengine.entity.scene.Scene"/>
+<fullyQualifiedTypeName name="org.andengine.entity.scene.background.Background"/>
+<fullyQualifiedTypeName name="org.andengine.engine.camera.Camera"/>
+<fullyQualifiedTypeName name="org.andengine.entity.Entity"/>
+<fullyQualifiedTypeName name="com.bloc.blocs.Blocs"/>
+</qualifiedTypeNameHistroy>

@@ -1,0 +1,7 @@
+package com.bloc.blocs;
+
+public class MainMenuScene extends Scene {
+	
+	Blocs activity;
+
+}

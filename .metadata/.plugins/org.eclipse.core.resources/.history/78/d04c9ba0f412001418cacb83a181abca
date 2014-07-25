@@ -1,0 +1,28 @@
+package com.bloc.blocs;
+
+import org.andengine.engine.camera.Camera;
+
+public class GamePiece {
+	
+	public static GamePiece instance;
+	
+	boolean moveable;
+	Camera mCamera;
+	
+	public static GamePiece getSharedInstance() {
+		if (instance == null)
+			instance = new GamePiece();
+		return instance;
+	}
+	
+	private GamePiece() {
+		moveable = true;
+		mCamera = Blocs.getSharedInstance().mCamera;
+		
+	}
+	
+	public void fallingPiece(float gravityRate) {
+		
+	}
+
+}

@@ -1,0 +1,31 @@
+package com.bloc.blocs;
+
+import org.andengine.engine.camera.Camera;
+import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.Background;
+
+import android.hardware.SensorManager;
+
+public class GameScene extends Scene{
+	
+	public Ship ship;
+	Camera mCamera;
+	
+	public float accelerometerSpeedX;
+	
+	public GameScene() {
+		setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
+		mCamera = Blocs.getSharedInstance().mCamera;
+		ship = Ship.getSharedInstance();
+		attachChild(ship.sprite);
+		
+		Blocs.getSharedInstance().setCurrentScene(this);
+		SensorManager sensorManager = (SensorManager) Blocs.getSharedInstance().getSystemService(Blocs.SENSOR_SERVICE);
+		
+	}
+	
+	public void moveShip() {
+		ship.moveShip(accelerometerSpeedX);
+	}
+
+}

@@ -1,0 +1,10 @@
+1406172366728	Rename local variable 'highScoreBtn'
+1406172386935	Rename local variable 'achieveBtn'
+1406172405996	Rename field 'ACHIEVE_BTN'
+1406172421491	Rename field 'HIGHSCORE_BTN'
+1406176825683	Move file
+1406176833308	Delete element
+1406180010599	Rename local variable 'piece'
+1406253012567	Rename local variable 'topMid'
+1406253023670	Rename local variable 'bottomMid'
+1406253033975	Rename local variable 'bottom'
