@@ -118,7 +118,8 @@ public class CollisionDetectionExample extends SimpleBaseGameActivity {
 
 		final float centerX = (CAMERA_WIDTH - this.mFaceTextureRegion.getWidth()) / 2;
 		final float centerY = (CAMERA_HEIGHT - this.mFaceTextureRegion.getHeight()) / 2;
-
+		
+		//This makes it rotate endlessly
 		final LoopEntityModifier entityModifier = new LoopEntityModifier(new ParallelEntityModifier(new RotationModifier(6, 0, 360), new SequenceEntityModifier(new ScaleModifier(3, 1, 1.5f), new ScaleModifier(3, 1.5f, 1))));
 
 		/* Create A spinning rectangle and a line. */
@@ -130,7 +131,10 @@ public class CollisionDetectionExample extends SimpleBaseGameActivity {
 		final Line line = new Line(centerX + 50 - 16, centerY, centerX + 50 + 16, centerY, this.getVertexBufferObjectManager());
 		line.registerEntityModifier(entityModifier.deepCopy());
 		scene.attachChild(line);
-
+		
+		/**
+		*	face is what the analog controllers control. 
+		*/
 		final Sprite face = new Sprite(centerX, centerY + 42, this.mFaceTextureRegion, this.getVertexBufferObjectManager());
 		final PhysicsHandler physicsHandler = new PhysicsHandler(face);
 		face.registerUpdateHandler(physicsHandler);
@@ -180,7 +184,7 @@ public class CollisionDetectionExample extends SimpleBaseGameActivity {
 
 		velocityOnScreenControl.setChildScene(rotationOnScreenControl);
 
-		/* The actual collision-checking. */
+		/* ----------------	The actual collision-checking. ----------------------*/
 		scene.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void reset() { }

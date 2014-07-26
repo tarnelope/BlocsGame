@@ -88,7 +88,8 @@ public class Blocs extends SimpleBaseGameActivity {
         mCurrentScene.setBackground(new Background(0f, 0f, 0f));
         
         mEngine.registerUpdateHandler(new FPSLogger());
-        mCurrentScene = new HomeScene();
+       // mCurrentScene = new HomeScene();
+        mCurrentScene = new PlayScene();
         
         return mCurrentScene;
     }
@@ -126,7 +127,7 @@ public class Blocs extends SimpleBaseGameActivity {
 	public Entity getS() {
 		Rectangle one = new Rectangle(0, 30, 30, 30, Blocs.getSharedInstance().getVertexBufferObjectManager());
 		Rectangle two = new Rectangle(30, 30, 30, 30, Blocs.getSharedInstance().getVertexBufferObjectManager());
-		Rectangle three = new Rectangle(0, 30, 30, 30, Blocs.getSharedInstance().getVertexBufferObjectManager());
+		Rectangle three = new Rectangle(30, 0, 30, 30, Blocs.getSharedInstance().getVertexBufferObjectManager());
 		Rectangle four = new Rectangle(60, 0, 30, 30, Blocs.getSharedInstance().getVertexBufferObjectManager());
 		Entity shape = new Entity(0, 0);
 		shape.attachChild(one);

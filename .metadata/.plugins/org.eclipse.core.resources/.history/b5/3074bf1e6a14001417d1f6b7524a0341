@@ -1,0 +1,14 @@
+package com.bloc.blocs;
+
+import org.andengine.engine.camera.Camera;
+
+public class TetrisBoard {
+	
+	Camera mCamera;
+	
+	public TetrisBoard() {
+		mCamera = Blocs.getSharedInstance().mCamera;
+		
+	}
+
+}

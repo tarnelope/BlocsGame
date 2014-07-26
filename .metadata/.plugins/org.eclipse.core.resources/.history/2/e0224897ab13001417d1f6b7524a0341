@@ -1,0 +1,30 @@
+package com.bloc.blocs;
+
+import org.andengine.engine.camera.Camera;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.Background;
+
+
+
+public class PlayScene extends Scene {
+	
+	Camera mCamera;
+	public GamePiece gamePiece;
+
+	public PlayScene() {
+		setBackground(new Background(0.1f, 0.1f, 0.1f));
+		mCamera = Blocs.getSharedInstance().mCamera;
+		
+		Rectangle playField = new Rectangle(60, 60, 300, 660, Blocs.getSharedInstance().getVertexBufferObjectManager());
+		playField.setColor(0.93f, 0.877f, 0.822f);
+		playField.setPosition(90, 60);
+		attachChild(playField);
+		
+		gamePiece = GamePiece.getSharedInstance();
+		
+		attachChild(gamePiece.piece);
+		
+		Blocs.getSharedInstance().setCurrentScene(this);
+	}
+}

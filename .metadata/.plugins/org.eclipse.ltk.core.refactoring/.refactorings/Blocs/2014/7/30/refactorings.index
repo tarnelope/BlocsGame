@@ -8,3 +8,6 @@
 1406253012567	Rename local variable 'topMid'
 1406253023670	Rename local variable 'bottomMid'
 1406253033975	Rename local variable 'bottom'
+1406346932704	Rename local variable 'row'
+1406346941954	Rename local variable 'col'
+1406348168577	Delete element
