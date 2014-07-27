@@ -1,0 +1,68 @@
+package com.bloc.blocs;
+
+import static org.andengine.extension.physics.box2d.util.constants.PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
+
+import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.extension.physics.box2d.PhysicsWorld;
+
+import android.hardware.SensorManager;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+
+public class TetrisPiece {
+	
+	private static final FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(1, 0.5f, 0.5f);
+	private static final float TILE_DIMEN = TetrisBoard.TILE_DIMEN;
+	
+	PhysicsWorld mPhysicsWorld;
+	boolean moveable = true;
+	Sprite magLog;
+
+	public TetrisPiece() {
+		mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
+
+		magLog = new Sprite(Blocs.CAMERA_WIDTH/2, 60, Blocs.getSharedInstance().logPiece, Blocs.getSharedInstance().getVertexBufferObjectManager());
+		
+		Body mBody = createLogBody(mPhysicsWorld, magLog, BodyType.StaticBody, FIXTURE_DEF);
+		
+	}
+	
+	private static Body createLogBody(final PhysicsWorld pPhysicsWorld, final IAreaShape pShape, final BodyType pBodyType, final FixtureDef pFixtureDef) {
+        /* Remember that the vertices are relative to the center-coordinates of the Shape. */
+       
+		final float shapeWidth = pShape.getWidthScaled() / PIXEL_TO_METER_RATIO_DEFAULT;
+        final float shapeHeight = pShape.getHeightScaled() / PIXEL_TO_METER_RATIO_DEFAULT;
+
+        final Vector2[] vertices = {
+        		new Vector2(0, 0),
+        		new Vector2(shapeWidth, 0),
+        		new Vector2(shapeWidth, shapeHeight),
+        		new Vector2(0, shapeHeight)
+        };
+
+        return PhysicsFactory.createPolygonBody(pPhysicsWorld, pShape, vertices, pBodyType, pFixtureDef);
+	}
+	
+	private static Body createSquareBody(final PhysicsWorld pPhysicsWorld, final IAreaShape pShape, final BodyType pBodyType, final FixtureDef pFixtureDef) {
+        /* Remember that the vertices are relative to the center-coordinates of the Shape. */
+       
+		final float shapeWidth = pShape.getWidthScaled() / PIXEL_TO_METER_RATIO_DEFAULT;
+        final float shapeHeight = pShape.getHeightScaled() / PIXEL_TO_METER_RATIO_DEFAULT;
+
+        final Vector2[] vertices = {
+        		new Vector2(0, 0),
+        		new Vector2(shapeWidth, 0),
+        		new Vector2(shapeWidth, shapeWidth),
+        		new Vector2(0, shapeHeight)
+        };
+
+        return PhysicsFactory.createPolygonBody(pPhysicsWorld, pShape, vertices, pBodyType, pFixtureDef);
+}
+	
+
+}

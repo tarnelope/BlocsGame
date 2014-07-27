@@ -1,0 +1,104 @@
+package com.bloc.blocs;
+
+import static org.andengine.extension.physics.box2d.util.constants.PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
+
+import org.andengine.engine.camera.Camera;
+import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.entity.Entity;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.extension.physics.box2d.PhysicsWorld;
+
+import android.hardware.SensorManager;
+import android.util.Log;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+
+
+
+public class PlayScene extends Scene {
+	
+	Camera mCamera;
+	final public GamePiece gamePiece;
+	
+	public PhysicsWorld physicsWorld;
+	private static final FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(1, 0.5f, 0.5f);
+	public Entity grid;
+	
+	Sprite tile;
+	Sprite magLog;
+
+	public PlayScene() {
+		
+		setBackground(new Background(0.1f, 0.6f, 0.134f));
+		mCamera = Blocs.getSharedInstance().mCamera;
+		
+		physicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
+		
+		TetrisBoard board = new TetrisBoard(this);
+		final Rectangle ground = new Rectangle(board.LEFT_X, board.BOTTOM_Y+board.TILE_DIMEN, board.BOARD_WIDTH, 2, Blocs.getSharedInstance().getVertexBufferObjectManager());
+		ground.setColor(0f, 0f, 0f);
+		
+		gamePiece = new GamePiece();
+		tile = new Sprite(200, 200, Blocs.getSharedInstance().cyanTile, Blocs.getSharedInstance().getVertexBufferObjectManager());
+		
+		magLog = new Sprite(Blocs.CAMERA_WIDTH/2, 60, Blocs.getSharedInstance().logPiece, Blocs.getSharedInstance().getVertexBufferObjectManager());
+		
+		Body mBody = createLogBody(physicsWorld, magLog, BodyType.StaticBody, FIXTURE_DEF);
+	
+		attachChild(gamePiece.piece);
+		attachChild(magLog);
+		attachChild(tile);
+		attachChild(ground);
+		
+		registerUpdateHandler(new IUpdateHandler() {
+			
+			@Override
+			public void reset() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onUpdate(float pSecondsElapsed) {
+	//			float newY = magLog.getY() + 30;
+	//			magLog.setPosition(magLog.getX(), newY);
+				
+		//		if (magLog.collidesWith(ground)) {
+				//	Log.d("PlayScene", "magLog touched ground");
+			//	}
+				
+			}
+		});
+		
+		Blocs.getSharedInstance().setCurrentScene(this);
+	}
+	
+	BodyType pBodyType = BodyType.StaticBody;
+	FixtureDef pFixtureDef = new FixtureDef();
+	
+    private static Body createLogBody(final PhysicsWorld pPhysicsWorld, final IAreaShape pShape, final BodyType pBodyType, final FixtureDef pFixtureDef) {
+            /* Remember that the vertices are relative to the center-coordinates of the Shape. */
+           
+    		final float shapeWidth = pShape.getWidthScaled() / PIXEL_TO_METER_RATIO_DEFAULT;
+            final float shapeHeight = pShape.getHeightScaled() / PIXEL_TO_METER_RATIO_DEFAULT;
+
+            final Vector2[] vertices = {
+            		new Vector2(0, 0),
+            		new Vector2(shapeWidth, 0),
+            		new Vector2(shapeWidth, shapeHeight),
+            		new Vector2(0, shapeHeight)
+            };
+
+            return PhysicsFactory.createPolygonBody(pPhysicsWorld, pShape, vertices, pBodyType, pFixtureDef);
+    }
+	
+	
+}

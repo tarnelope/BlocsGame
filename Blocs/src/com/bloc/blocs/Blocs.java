@@ -10,12 +10,16 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
-import android.R.bool;
 import android.graphics.Typeface;
 
 
@@ -67,6 +71,20 @@ public class Blocs extends SimpleBaseGameActivity {
 		return new EngineOptions(true, ScreenOrientation.PORTRAIT_SENSOR, new RatioResolutionPolicy(CAMERA_WIDTH, CAMERA_HEIGHT), mCamera);
 	}
 	
+	private BitmapTextureAtlas mBitmapTextureAtlas;
+
+	public TextureRegion cyanTile;
+	public TextureRegion grayTile;
+	
+	public TextureRegion logPiece;
+	public TextureRegion sqPiece;
+	public TextureRegion zPiece;
+	public TextureRegion sPiece;
+	public TextureRegion tPiece;
+	public TextureRegion lPiece;
+	public TextureRegion revLPiece;
+	
+	
     @Override
     protected void onCreateResources() {
     	mFont = FontFactory.create(this.getFontManager(),this.getTextureManager(), 256, 256,Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 28);
@@ -79,6 +97,21 @@ public class Blocs extends SimpleBaseGameActivity {
 	 	pieceArray.add(getRightL());
 	 	pieceArray.add(getLeftL());
 	 	pieceArray.add(getT());
+
+		mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+		cyanTile = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBitmapTextureAtlas, this, "cyan.png", 0, 0); // 64x32
+		grayTile = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBitmapTextureAtlas, this, "gray.png", 30, 0);
+		
+		//Tetris Pieces
+		logPiece = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBitmapTextureAtlas, this, "magenta_log.png", 60, 0);
+		sqPiece = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBitmapTextureAtlas, this, "mag_square.png", 90, 90);
+		tPiece = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBitmapTextureAtlas, this, "t_tile.png", 120, 0);
+		zPiece = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBitmapTextureAtlas, this, "z_tile.png", 150, 0);
+		sPiece = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBitmapTextureAtlas, this, "s_tile.png", 0, 150);
+		lPiece = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBitmapTextureAtlas, this, "l_tile.png", 30, 120);
+		revLPiece = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBitmapTextureAtlas, this, "rev_L.png", 0, 60);
+
+		mBitmapTextureAtlas.load();
     }
 
     @Override
@@ -110,6 +143,12 @@ public class Blocs extends SimpleBaseGameActivity {
 		square.attachChild(lowerLeft);
 		return square;
 	}
+    
+    public Sprite makeLog() {
+		Sprite tile = new Sprite(200, 200, Blocs.getSharedInstance().cyanTile, Blocs.getSharedInstance().getVertexBufferObjectManager());
+		
+		return tile;
+    }
 	
 	public Entity getLog() {
 		Rectangle one = new Rectangle(0, 0, 30, 30, Blocs.getSharedInstance().getVertexBufferObjectManager());

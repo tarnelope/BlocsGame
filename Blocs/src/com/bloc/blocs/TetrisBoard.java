@@ -1,10 +1,13 @@
 package com.bloc.blocs;
 
+import java.util.ArrayList;
+
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
 
 public class TetrisBoard {
 	
@@ -24,15 +27,20 @@ public class TetrisBoard {
 	
 	private boolean[][] boardArray;
 	
+	final Rectangle ground;
+
+	public ArrayList<TetrisTile> lastRowArray;
+	
 	public TetrisBoard getTetrisBoardInstance(Scene s) {
 		if (instance == null)
 			instance = new TetrisBoard(s);
 		return instance;
-		
 	}
 	
 	public TetrisBoard(Scene s) {
 		//mCamera = Blocs.getSharedInstance().mCamera;
+		
+		lastRowArray = new ArrayList<TetrisTile>();
 		
 		boardArray = new boolean[NUM_COLUMNS][NUM_ROWS];
 		
@@ -42,24 +50,44 @@ public class TetrisBoard {
 				float y = BOTTOM_Y - TILE_DIMEN*row;
 				//float y = TILE_DIMEN*row + TOP_Y;
 				TetrisTile tile = new TetrisTile(row, col, x, y, TILE_DIMEN, TILE_DIMEN, Blocs.getSharedInstance().getVertexBufferObjectManager());
-				boardArray[row][col] = tile.isFilled;
+				boardArray[col][row] = tile.isFilled;
+				if (row == 0) {
+					lastRowArray.add(tile);
+				}
 				s.attachChild(tile);
 			}
 		}
+		
+		ground = new Rectangle(LEFT_X, BOTTOM_Y+TILE_DIMEN, BOARD_WIDTH, 2, Blocs.getSharedInstance().getVertexBufferObjectManager());
+		ground.setColor(0f, 0f, 0f);
+		s.attachChild(ground);
 	}
 	
-	public class TetrisTile extends Rectangle {
-		
+	public Rectangle getGround() {
+		return ground;
+	}
+	
+	public ArrayList<TetrisTile> getLastRowArray() {
+		return lastRowArray;
+	}
+	
+	public class TetrisTile extends Sprite {
+	
 		boolean isFilled = false;
 		int row;
 		int col;
 		
 		public TetrisTile(int r, int c, float pX, float pY, float pWidth, float pHeight,
 				VertexBufferObjectManager vertexBufferObjectManager) {
-			super(pX, pY, pWidth, pHeight, vertexBufferObjectManager);
+			this(r, c, pX, pY, pWidth, pHeight, Blocs.getSharedInstance().grayTile, vertexBufferObjectManager);
+		}
+		
+		public TetrisTile(int r, int c, float pX, float pY, float pWidth, float pHeight,
+				ITextureRegion pTextureRegion,
+				VertexBufferObjectManager vertexBufferObjectManager) {
+			super(pX, pY, pWidth, pHeight, pTextureRegion, vertexBufferObjectManager);
 			row = r;
 			col = c;
-			setColor(new Color(0.1f, 0.2f, 0.6f));
 		}
 		
 		public void setColRow(int r, int c) {

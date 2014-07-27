@@ -1,0 +1,9 @@
+package com.bloc.blocs;
+
+public class TetrisPiece extends Sprite {
+	
+	public TetrisPiece() {
+		
+	}
+
+}
