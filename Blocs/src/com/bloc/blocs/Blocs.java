@@ -126,6 +126,7 @@ public class Blocs extends SimpleBaseGameActivity {
         
         return mCurrentScene;
     }
+ 
     
     public ArrayList<Entity> getPieceArray() {
     	return pieceArray;

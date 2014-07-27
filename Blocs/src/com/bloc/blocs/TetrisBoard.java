@@ -20,7 +20,7 @@ public class TetrisBoard {
 	public final static int LEFT_X = 90;
 	public final static int RIGHT_X = 390;
 	public final static int TOP_Y= 60;
-	public final static int BOTTOM_Y = 720;
+	public final static int BOTTOM_Y = 690;
 	
 	public final static int NUM_COLUMNS = 10;
 	public final static int NUM_ROWS = 22;
@@ -58,7 +58,7 @@ public class TetrisBoard {
 			}
 		}
 		
-		ground = new Rectangle(LEFT_X, BOTTOM_Y+TILE_DIMEN, BOARD_WIDTH, 2, Blocs.getSharedInstance().getVertexBufferObjectManager());
+		ground = new Rectangle(LEFT_X, BOTTOM_Y, BOARD_WIDTH, 2, Blocs.getSharedInstance().getVertexBufferObjectManager());
 		ground.setColor(0f, 0f, 0f);
 		s.attachChild(ground);
 	}
