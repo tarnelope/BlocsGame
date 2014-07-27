@@ -126,12 +126,6 @@ public class TetrisPiece {
 			float newY = piece.getY() + TetrisBoard.TILE_DIMEN;
 			piece.setPosition(piece.getX(), newY);
 		}
-		if (piece.getX() <= TetrisBoard.LEFT_X) {
-			piece.setPosition(TetrisBoard.LEFT_X, piece.getY());
-		}
-		if (piece.getX() >= TetrisBoard.RIGHT_X) {
-			piece.setPosition(TetrisBoard.RIGHT_X, piece.getY());
-		}
 	}
 	
 	public void movePieceHorizontally(float delta) {

@@ -69,14 +69,9 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 					counter = 0;
 					currentPiece.setPosition(currentPiece.getX(), currentPiece.getY()+board.TILE_DIMEN);
 				}
-				if (currentPiece.getX() <= TetrisBoard.LEFT_X) {
-					currentPiece.setPosition(TetrisBoard.LEFT_X, currentPiece.getY());
-				}
-				if (currentPiece.getX() >= TetrisBoard.RIGHT_X) {
-					currentPiece.setPosition(TetrisBoard.RIGHT_X, currentPiece.getY());
-				}
 			}
 		});
+		
 		
 		Blocs.getSharedInstance().setCurrentScene(this);
 		setOnSceneTouchListener(this);
@@ -100,7 +95,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
     		int deltaX = Math.round((origX - newX)%1000);
     		Log.d("PlayScene", "deltaX is "+deltaX+" MOVED!!!");
     		if (Math.abs(deltaX) > 20) {
-    			tetrisPiece.movePieceHorizontally(deltaX);
+    	//		tetrisPiece.movePieceHorizontally(deltaX);
     		}
 		};
 		if (pSceneTouchEvent.isActionUp()) {

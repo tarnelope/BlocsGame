@@ -69,11 +69,11 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 					counter = 0;
 					currentPiece.setPosition(currentPiece.getX(), currentPiece.getY()+board.TILE_DIMEN);
 				}
-				if (currentPiece.getX() <= TetrisBoard.LEFT_X) {
-					currentPiece.setPosition(TetrisBoard.LEFT_X, currentPiece.getY());
+				if (piece.getX() <= TetrisBoard.LEFT_X) {
+					piece.setPosition(TetrisBoard.LEFT_X, piece.getY());
 				}
-				if (currentPiece.getX() >= TetrisBoard.RIGHT_X) {
-					currentPiece.setPosition(TetrisBoard.RIGHT_X, currentPiece.getY());
+				if (piece.getX() >= TetrisBoard.RIGHT_X) {
+					piece.setPosition(TetrisBoard.RIGHT_X, piece.getY());
 				}
 			}
 		});

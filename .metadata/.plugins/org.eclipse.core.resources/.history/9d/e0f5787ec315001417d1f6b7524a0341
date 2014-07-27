@@ -67,16 +67,11 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 				}
 				if (counter > 0.5 && tetrisPiece.moveable) {
 					counter = 0;
-					currentPiece.setPosition(currentPiece.getX(), currentPiece.getY()+board.TILE_DIMEN);
-				}
-				if (currentPiece.getX() <= TetrisBoard.LEFT_X) {
-					currentPiece.setPosition(TetrisBoard.LEFT_X, currentPiece.getY());
-				}
-				if (currentPiece.getX() >= TetrisBoard.RIGHT_X) {
-					currentPiece.setPosition(TetrisBoard.RIGHT_X, currentPiece.getY());
+					//currentPiece.setPosition(currentPiece.getX(), currentPiece.getY()+board.TILE_DIMEN);
 				}
 			}
 		});
+		
 		
 		Blocs.getSharedInstance().setCurrentScene(this);
 		setOnSceneTouchListener(this);

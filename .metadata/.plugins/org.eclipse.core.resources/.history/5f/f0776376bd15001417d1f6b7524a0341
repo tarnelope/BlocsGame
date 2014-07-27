@@ -59,7 +59,7 @@ public class TetrisPiece {
 		
 		shapeType = randInt(1, 7);
 		
-		switch (shapeType) {
+		switch (1) {
 			case 1: //Log
 				piece = logSprite();
 				//piece = new Sprite(Blocs.CAMERA_WIDTH/2, 60, Blocs.getSharedInstance().logPiece, Blocs.getSharedInstance().getVertexBufferObjectManager());
@@ -122,15 +122,9 @@ public class TetrisPiece {
 	}
 	
 	public void movePieceDown() {
-		if (moveable && piece.getY()+piece.getHeight() < TetrisBoard.BOTTOM_Y - TetrisBoard.TILE_DIMEN) {
+		if (moveable && piece.getY() < TetrisBoard.BOTTOM_Y - TetrisBoard.TILE_DIMEN) {
 			float newY = piece.getY() + TetrisBoard.TILE_DIMEN;
 			piece.setPosition(piece.getX(), newY);
-		}
-		if (piece.getX() <= TetrisBoard.LEFT_X) {
-			piece.setPosition(TetrisBoard.LEFT_X, piece.getY());
-		}
-		if (piece.getX() >= TetrisBoard.RIGHT_X) {
-			piece.setPosition(TetrisBoard.RIGHT_X, piece.getY());
 		}
 	}
 	
