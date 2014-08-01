@@ -19,7 +19,6 @@
 <fullyQualifiedTypeName name="org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener"/>
 <fullyQualifiedTypeName name="org.andengine.entity.primitive.Rectangle"/>
 <fullyQualifiedTypeName name="android.hardware.SensorEventListener"/>
-<fullyQualifiedTypeName name="org.andengine.engine.handler.IUpdateHandler"/>
 <fullyQualifiedTypeName name="android.hardware.SensorManager"/>
 <fullyQualifiedTypeName name="com.bloc.blocs.SensorListener"/>
 <fullyQualifiedTypeName name="com.bloc.blocs.GameLoopUpdateHandler"/>
@@ -31,11 +30,17 @@
 <fullyQualifiedTypeName name="org.andengine.entity.util.FPSLogger"/>
 <fullyQualifiedTypeName name="android.R.bool"/>
 <fullyQualifiedTypeName name="org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener"/>
-<fullyQualifiedTypeName name="android.util.Log"/>
 <fullyQualifiedTypeName name="com.bloc.blocs.R.string"/>
 <fullyQualifiedTypeName name="org.andengine.entity.scene.Scene"/>
 <fullyQualifiedTypeName name="org.andengine.entity.scene.background.Background"/>
 <fullyQualifiedTypeName name="org.andengine.engine.camera.Camera"/>
 <fullyQualifiedTypeName name="org.andengine.entity.Entity"/>
 <fullyQualifiedTypeName name="com.bloc.blocs.Blocs"/>
+<fullyQualifiedTypeName name="org.andengine.engine.handler.IUpdateHandler"/>
+<fullyQualifiedTypeName name="com.bloc.blocs.PlayScene"/>
+<fullyQualifiedTypeName name="org.andengine.engine.handler.timer.TimerHandler"/>
+<fullyQualifiedTypeName name="com.bloc.blocs.Log"/>
+<fullyQualifiedTypeName name="com.bloc.blocs.LogPiece"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="com.bloc.blocs.TetrisBoard"/>
 </qualifiedTypeNameHistroy>

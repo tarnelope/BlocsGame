@@ -3,9 +3,7 @@ package com.bloc.blocs;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.Entity;
-import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.IOnSceneTouchListener;
-import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
@@ -24,16 +22,24 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	
 	Camera mCamera;
 	SurfaceGestureDetector gDetector;
+	PlayScene scene;
 	
 	public PhysicsWorld physicsWorld;
 	public Entity grid;
-	TetrisPiece tetrisPiece;
+	LogPiece tetrisPiece;
 	final TetrisBoard board;
 	
 	Sprite magLog;
-	Sprite currentPiece;
+	public Sprite currentPiece;
 	
 	private float counter = 0.0f;
+	
+	public PlayScene getPlayScene() {
+		if (scene == null) {
+			scene = new PlayScene();
+		}
+		return scene;
+	}
 	
 	public PlayScene() {
 		
@@ -58,22 +64,25 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
 				counter += pSecondsElapsed;
-				if (currentPiece.collidesWith(board.getGround())) {
-					Log.d("PlayScene", "COLLIDED! at "+currentPiece.getY());
-					tetrisPiece.setMoveable(false);
-					float y = board.getGround().getY();
-					currentPiece.setPosition(currentPiece.getX(), y-currentPiece.getHeight());
-					addNewPiece();
-				}
-				if (counter > 0.5 && tetrisPiece.moveable) {
-					counter = 0;
-					currentPiece.setPosition(currentPiece.getX(), currentPiece.getY()+board.TILE_DIMEN);
-				}
-				if (currentPiece.getX() <= TetrisBoard.LEFT_X) {
-					currentPiece.setPosition(TetrisBoard.LEFT_X, currentPiece.getY());
-				}
-				if (currentPiece.getX() >= TetrisBoard.RIGHT_X) {
-					currentPiece.setPosition(TetrisBoard.RIGHT_X, currentPiece.getY());
+				if (currentPiece != null ) {
+					if (currentPiece.getY()+tetrisPiece.getOrigHeight() >= TetrisBoard.BOTTOM_Y+TetrisBoard.TILE_DIMEN) {
+	//					Log.d("PlayScene", "COLLIDED! at "+currentPiece.getY());
+						tetrisPiece.setMoveable(false);
+						float y = board.getGround().getY();
+						currentPiece.setPosition(currentPiece.getX(), y-tetrisPiece.getOrigHeight());
+						addNewPiece();
+					}
+					if (counter > 0.5 && tetrisPiece.isMoveable) {
+						counter = 0;
+						currentPiece.setPosition(currentPiece.getX(), currentPiece.getY()+board.TILE_DIMEN);
+					}
+					//Log.d("xBound is ", String.valueOf(currentPiece.getX()+tetrisPiece.getOrigWidth()));
+					/*if (currentPiece.getX()-tetrisPiece.getOrigWidth() <= TetrisBoard.LEFT_X+TetrisBoard.TILE_DIMEN) {
+						currentPiece.setPosition(TetrisBoard.LEFT_X, currentPiece.getY());
+					}*/
+					if (currentPiece.getX() >= TetrisBoard.RIGHT_X) {
+						currentPiece.setPosition(TetrisBoard.RIGHT_X, currentPiece.getY());
+					}
 				}
 			}
 		});
@@ -83,36 +92,60 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	}
 	
 	float origX = TetrisBoard.LEFT_X+TetrisBoard.BOARD_WIDTH/2;
+	long startTime = 0;
+	
+	private float originX = 0.0f;
+	private static final float MOVE_TOUCH_THRESHOLD = 50;
+	private static final long TAP_TOUCH_THRESHOLD = 75;
+	private float distanceMove = 0.0f;
 	
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, final TouchEvent pSceneTouchEvent)
 	{
 		
-	    if (pSceneTouchEvent.isActionDown() && !pSceneTouchEvent.isActionMove())
+	    if (pSceneTouchEvent.isActionDown())
 	    {
-	    	Log.d("PlayScene", "TOUCH!");
-	        tetrisPiece.rotatePieceCCW();
-	    }
-		if (pSceneTouchEvent.isActionMove()) {
-			Log.d("ACTION", "MOVING!!!");
-			float newX = pSceneTouchEvent.getX();
-			
-    		int deltaX = Math.round((origX - newX)%1000);
-    		Log.d("PlayScene", "deltaX is "+deltaX+" MOVED!!!");
-    		if (Math.abs(deltaX) > 20) {
-    			tetrisPiece.movePieceHorizontally(deltaX);
+	    	originX = pSceneTouchEvent.getX(); //the initial X
+	    	startTime = pSceneTouchEvent.getMotionEvent().getEventTime(); //for calculating delta tie
+
+	    } else if (pSceneTouchEvent.isActionMove()) {
+			float deltaX = pSceneTouchEvent.getX() - originX;
+    		int tilesMoved = Math.round(deltaX/MOVE_TOUCH_THRESHOLD);
+    	
+    		if (tetrisPiece != null && tilesMoved != 0) {
+    			distanceMove = (TetrisBoard.TILE_DIMEN * tilesMoved);
+    			if (currentPiece.getX()-tetrisPiece.getOrigWidth()+distanceMove >= TetrisBoard.LEFT_X-TetrisBoard.TILE_DIMEN &&
+    					currentPiece.getX()+tetrisPiece.getOrigWidth()+distanceMove <= TetrisBoard.RIGHT_X) {
+    				currentPiece.setPosition(currentPiece.getX() + distanceMove, currentPiece.getY());
+    			}
+    			
+				originX += (tilesMoved * MOVE_TOUCH_THRESHOLD); // Move logical origin to prevent large jumps after move
     		}
+    		
+		} else if (pSceneTouchEvent.isActionUp()) { //End of touch event
+			float deltaTime = pSceneTouchEvent.getMotionEvent().getEventTime() - startTime;
+			//Log.d("playScene", "UP! "+String.valueOf(deltaTime));
+			if( deltaTime <= TAP_TOUCH_THRESHOLD ) {
+				if (currentPiece.getX() - tetrisPiece.getOrigHeight() > TetrisBoard.LEFT_X) {
+					tetrisPiece.rotate90CW();
+				} else {
+					
+				}
+			}
 		};
-		if (pSceneTouchEvent.isActionUp()) {
-			origX = pSceneTouchEvent.getX();
-		}
+		
 	    return false;
 	}
 	
+	
 	public void addNewPiece() {
-		tetrisPiece = new TetrisPiece();
+	//	tetrisPiece = new TetrisPiece();
+		//currentPiece = tetrisPiece.getPiece();
+		//attachChild(currentPiece);
+		tetrisPiece = new LogPiece();
 		currentPiece = tetrisPiece.getPiece();
 		attachChild(currentPiece);
+		
 	}
 
 }

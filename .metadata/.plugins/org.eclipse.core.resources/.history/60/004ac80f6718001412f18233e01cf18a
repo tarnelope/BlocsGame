@@ -1,0 +1,48 @@
+package com.bloc.blocs;
+
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
+
+public class Tile {
+	
+	private boolean isFilled = false;
+	int row;
+	int col;
+	float dimen = 30.0f;
+	Sprite mTile;
+	
+	//for creating tetromino piece
+	public Tile(int r, int c, float pWidth, float pHeight) {
+		this(r, c, TetrisBoard.LEFT_X+c*TetrisBoard.TILE_DIMEN, TetrisBoard.TOP_Y+r*TetrisBoard.TILE_DIMEN, pWidth, pHeight, Blocs.getSharedInstance().cyanTile);
+	}
+	
+	public Tile(int r, int c, float pX, float pY, float pWidth, float pHeight,
+			ITextureRegion pTextureRegion) {
+		mTile = new Sprite(pX, pY, pWidth, pHeight, pTextureRegion, Blocs.getSharedInstance().getVertexBufferObjectManager());
+		row = r;
+		col = c;
+	}
+	
+	public Sprite getTile() {
+		return mTile;
+	}
+	
+	public boolean isFilled() {
+		return isFilled;
+	}
+	
+	public void setColRow(int r, int c) {
+		row = r;
+		col = c;
+	}
+	
+	public int getRow() {
+		return row;
+	}
+	
+	public int getCol() {
+		return col;
+	}
+	
+}

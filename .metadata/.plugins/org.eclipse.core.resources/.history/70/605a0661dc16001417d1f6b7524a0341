@@ -1,0 +1,19 @@
+package com.bloc.blocs;
+
+public class Tetromino {
+	
+	//Properties
+	int mNumOfTiles = 4;
+	boolean mIsRotated90 = false;
+	boolean mIsRotated180 = false;
+	boolean mIsRotated270 = false;
+	boolean mIsReflected = false;
+	int mX;
+	int mY;
+	
+	public Tetromino(int x, int y, boolean orientation) {
+		mX = x;
+		mY = y;
+	}
+
+}

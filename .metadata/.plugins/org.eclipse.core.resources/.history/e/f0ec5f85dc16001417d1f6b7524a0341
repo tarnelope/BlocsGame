@@ -1,0 +1,10 @@
+package com.bloc.blocs;
+
+public class Log extends Tetromino {
+	
+	int height = 4;
+	
+	public Log(int x, int y, boolean orientation) {
+		super(x, y, 4*TetrisBoard.TILE_DIMEN, 1*TetrisBoard.TILE_DIMEN, false);
+	}
+}

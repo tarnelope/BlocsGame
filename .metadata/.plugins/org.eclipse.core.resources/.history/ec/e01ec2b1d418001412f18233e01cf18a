@@ -1,0 +1,32 @@
+package com.bloc.blocs;
+
+import java.util.ArrayList;
+
+public class LogPiece extends Tetromino {
+	
+	ArrayList<Tile> tiles;
+	
+	public LogPiece() {
+		super(Math.round(TetrisBoard.RIGHT_X-5*TetrisBoard.TILE_DIMEN), Math.round(TetrisBoard.TOP_Y-2*TetrisBoard.TILE_DIMEN), 1, 4, false);
+		
+	}
+	
+	//How do I draw the log piece with the array
+	private void logSprite() {
+		tiles = new ArrayList<Tile>();
+		for (int i = 0; i < NUM_OF_TILES; i++) {
+			Tile t = new Tile(START_COL, START_ROW+i);
+			if (s == null) {
+				s = t.getTile();
+			}
+			s.attachChild(t.getTile());
+			tiles.add(t);
+		}
+	}
+	
+	@Override
+	public void rotate90CW() {
+		// TODO Auto-generated method stub
+		
+	}
+}

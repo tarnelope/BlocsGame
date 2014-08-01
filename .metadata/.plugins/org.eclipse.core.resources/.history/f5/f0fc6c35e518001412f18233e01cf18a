@@ -1,0 +1,100 @@
+package com.bloc.blocs;
+
+import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.sprite.Sprite;
+
+public abstract class Tetromino {
+	
+	//Properties
+	static final int NUM_OF_TILES = 4;
+	static final float START_X = TetrisBoard.LEFT_X+5*TetrisBoard.TILE_DIMEN;
+	static final float START_Y = TetrisBoard.TOP_Y-2*TetrisBoard.TILE_DIMEN;
+	static final int START_ROW = 0;
+	static final int START_COL = 5;
+	
+	boolean mIsRotated0 = true;
+	boolean mIsRotated90 = false;
+	boolean mIsRotated180 = false;
+	boolean mIsRotated270 = false;
+	
+	boolean mIsReflected = false;
+	
+	boolean isMoveable;
+	
+	int mX;
+	int mY;
+	
+	float mHeight;
+	float mWidth;
+	
+	Sprite s;
+	Sprite piece;
+	
+	//Requires override
+	public abstract void rotate90CW();
+	
+	
+	public Tetromino(int x, int y, int numTilesWide, int numTilesTall, boolean orientation) {
+		mX = x;
+		mY = y;
+		mHeight = numTilesTall * TetrisBoard.TILE_DIMEN;
+		mWidth = numTilesWide * TetrisBoard.TILE_DIMEN;
+	}
+	
+	public float getOrigHeight() {
+		if (mIsRotated0 || mIsRotated180) {
+			return mHeight;
+		} else {
+			return mWidth;
+		}
+	}
+	
+	public float getOrigWidth() {
+		if (mIsRotated0 || mIsRotated180) {
+			return mWidth;
+		} else {
+			return mHeight;
+		}
+	}
+	
+	public void setSprite(Sprite sprite) {
+		s = sprite;
+	}
+	
+	public Sprite getPiece() {
+		return s;
+	}
+	
+	public void setMoveable(boolean b) {
+		isMoveable = b;
+	}
+	
+	public float getBottomY() {
+		Float f = 0.0f;
+		f = piece.getY()+piece.getHeight();
+		return f;
+	}
+	
+	public void movePieceDown() {
+		if (isMoveable && piece.getY()+piece.getHeight() < TetrisBoard.BOTTOM_Y - TetrisBoard.TILE_DIMEN) {
+			float newY = piece.getY() + TetrisBoard.TILE_DIMEN;
+			piece.setPosition(piece.getX(), newY);
+		}
+		if (piece.getX() <= TetrisBoard.LEFT_X) {
+			piece.setPosition(TetrisBoard.LEFT_X, piece.getY());
+		}
+		if (piece.getX() >= TetrisBoard.RIGHT_X) {
+			piece.setPosition(TetrisBoard.RIGHT_X, piece.getY());
+		}
+	}
+	
+	public void movePieceHorizontally(float delta) {
+		float oldX = piece.getX();
+		if (delta > 0) {
+			piece.setPosition(oldX+TetrisBoard.TILE_DIMEN, piece.getY());
+		} else if (delta < 0) {
+			piece.setPosition(oldX-TetrisBoard.TILE_DIMEN, piece.getY());
+		}
+		
+
+}

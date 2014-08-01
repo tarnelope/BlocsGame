@@ -1,0 +1,32 @@
+package com.bloc.blocs;
+
+public class Tetromino {
+	
+	//Properties
+	static final int NUM_OF_TILES = 4;
+	
+	boolean mIsRotated90 = false;
+	boolean mIsRotated180 = false;
+	boolean mIsRotated270 = false;
+	boolean mIsReflected = false;
+	int mX;
+	int mY;
+	float mHeight;
+	float mWidth;
+	
+	public Tetromino(int x, int y, float height, float width, boolean orientation) {
+		mX = x;
+		mY = y;
+		mHeight = height;
+		mWidth = width;
+	}
+	
+	public float getHeight() {
+		return mHeight;
+	}
+	
+	public float getWidth() {
+		return mWidth;
+	}
+
+}

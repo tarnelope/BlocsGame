@@ -1,0 +1,12 @@
+package com.bloc.blocs;
+
+public class Tetromino {
+	
+	//Properties
+	
+	
+	public Tetromino() {
+		
+	}
+
+}

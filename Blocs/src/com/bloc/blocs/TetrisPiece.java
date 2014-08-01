@@ -7,9 +7,12 @@ import java.util.Random;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.Entity;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.sprite.batch.SpriteGroup;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -27,10 +30,11 @@ public class TetrisPiece {
 	
 	private static final FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(1, 0.5f, 0.5f);
 	private static final float TILE_DIMEN = TetrisBoard.TILE_DIMEN;
-	
+	private static final String TAG = "TetrisPiece";
 	PhysicsWorld mPhysicsWorld;
 	public boolean moveable = true;
 	Sprite piece;
+	SpriteGroup piece1;
 	Body body;
 	
 	ArrayList<Sprite> buildTiles;
@@ -59,7 +63,7 @@ public class TetrisPiece {
 		
 		shapeType = randInt(1, 7);
 		
-		switch (shapeType) {
+		switch (1) {
 			case 1: //Log
 				piece = logSprite();
 				//piece = new Sprite(Blocs.CAMERA_WIDTH/2, 60, Blocs.getSharedInstance().logPiece, Blocs.getSharedInstance().getVertexBufferObjectManager());
@@ -164,6 +168,12 @@ public class TetrisPiece {
 				s.attachChild(s2);
 			}
 		}
+		//Sprite s3 = new Sprite(120, 120, Blocs.getSharedInstance().logPiece, Blocs.getSharedInstance().getVertexBufferObjectManager());
+		//Log.d("TetrisPiece", "the height of log sprite is "+s.getHeight());
+		
+		//Body logbody = createLogBody(mPhysicsWorld, s, BodyType.StaticBody, FIXTURE_DEF);
+		//s.setUserData(logbody);
+		//mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(s, logbody));
 		return s;
 	}
 	private Sprite squareSprite() {
@@ -298,10 +308,10 @@ public class TetrisPiece {
 		final float halfHeight = pShape.getHeightScaled() * 0.5f / PIXEL_TO_METER_RATIO_DEFAULT;
 
         final Vector2[] vertices = {
-        		new Vector2(-halfWidth, halfHeight),
-        		new Vector2(halfWidth, halfHeight),
+        		new Vector2(-halfWidth, -halfHeight),
         		new Vector2(halfWidth, -halfHeight),
-        		new Vector2(-halfWidth, -halfHeight)
+        		new Vector2(halfWidth, halfHeight),
+        		new Vector2(-halfWidth, halfHeight)	
         };
 
         return PhysicsFactory.createPolygonBody(pPhysicsWorld, pShape, vertices, pBodyType, pFixtureDef);

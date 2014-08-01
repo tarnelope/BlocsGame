@@ -1,9 +1,0 @@
-package com.bloc.blocs;
-
-public class TetrisBoard {
-	
-	public TetrisBoard() {
-		
-	}
-
-}

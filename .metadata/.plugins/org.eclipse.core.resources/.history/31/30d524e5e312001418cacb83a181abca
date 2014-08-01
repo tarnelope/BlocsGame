@@ -1,7 +1,0 @@
-package com.bloc.blocs;
-
-import org.andengine.entity.scene.Scene;
-
-public class PlayScene extends Scene {
-
-}
