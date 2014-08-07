@@ -1,0 +1,11 @@
+package Tetrominos;
+
+public class SquarePiece extends Tetromino {
+
+	public SquarePiece(int x, int y, int numTilesWide, int numTilesTall,
+			boolean orientation) {
+		super(x, y, numTilesWide, numTilesTall, orientation);
+		// TODO Auto-generated constructor stub
+	}
+
+}
