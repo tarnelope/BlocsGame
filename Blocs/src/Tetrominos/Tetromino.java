@@ -1,12 +1,18 @@
 package Tetrominos;
 
+import java.util.ArrayList;
+
 import org.andengine.entity.sprite.Sprite;
 
+import com.bloc.blocs.Blocs;
 import com.bloc.blocs.TetrisBoard;
+import com.bloc.blocs.Tile;
 
 import android.util.Log;
 
 public abstract class Tetromino {
+	
+	TetrisBoard tetrisBoard;
 	
 	//Properties
 	static final int NUM_OF_TILES = 4;
@@ -14,6 +20,8 @@ public abstract class Tetromino {
 	static final float START_Y = TetrisBoard.TOP_Y-2*TetrisBoard.TILE_DIMEN;
 	static final int START_ROW = 0;
 	static final int START_COL = 5;
+	
+	private String mTetromino;
 	
 	boolean mIsRotated0 = true;
 	boolean mIsRotated90 = false;
@@ -31,7 +39,25 @@ public abstract class Tetromino {
 	float mHeight;
 	float mWidth;
 	
+	ArrayList<Tile> tiles;
 	Sprite s;
+	
+	protected abstract void drawSprite();
+	public abstract void rotate();
+	public abstract float getOrigHeight();
+	public abstract float getOrigWidth();
+	public abstract void checkLeftBound();
+	public abstract void checkRightBound();
+	public abstract void fillTiles(TetrisBoard board);
+	public abstract boolean isClearBelow(TetrisBoard board);
+	
+	public void setTetrominoType(String s) {
+		mTetromino = s;
+	}
+	
+	public String getTetrominoType() {
+		return mTetromino;
+	}
 	
 	public void rotate90CW() {
 		if (mRotationBy90 == 3) {
@@ -54,10 +80,6 @@ public abstract class Tetromino {
 		mWidth = numTilesWide * TetrisBoard.TILE_DIMEN;
 		isMoveable = true;
 	}
-	
-	protected abstract void rotate();
-	protected abstract float getOrigHeight();
-	protected abstract float getOrigWidth();
 	
 	public void setSprite(Sprite sprite) {
 		s = sprite;

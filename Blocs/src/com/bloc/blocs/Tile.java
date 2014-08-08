@@ -3,15 +3,16 @@ package com.bloc.blocs;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
-import android.util.Log;
+import Tetrominos.Tetromino;
 
 public class Tile {
 	
-	boolean isFilled = false;
+	private boolean isFilled;
 	int row;
 	int col;
 	float dimen = 30.0f;
 	Sprite mTile;
+	Tetromino tet;
 	
 	//for creating new tetromino piece. R and C are relative to a starting sprite that it is attached to.
 	public Tile(int r, int c) {
@@ -25,6 +26,7 @@ public class Tile {
 				TetrisBoard.TILE_DIMEN, 
 				TetrisBoard.TILE_DIMEN, 
 				Blocs.getSharedInstance().cyanTile);
+		isFilled = false;
 	}
 	
 	public Tile(int r, int c, float pX, float pY, float pWidth, float pHeight,
@@ -52,4 +54,15 @@ public class Tile {
 		return col;
 	}
 	
+	public void setIsFilled(boolean b) {
+		isFilled = b;
+	}
+	
+	public boolean isFilled() {
+		return isFilled;
+	}
+	
+	public void setTetromino(Tetromino t) {
+		tet = t;
+	}
 }

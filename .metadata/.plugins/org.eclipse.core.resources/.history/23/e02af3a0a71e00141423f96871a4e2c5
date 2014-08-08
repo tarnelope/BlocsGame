@@ -1,0 +1,71 @@
+package Tetrominos;
+
+import java.util.ArrayList;
+
+import com.bloc.blocs.TetrisBoard;
+import com.bloc.blocs.Tile;
+
+public class SquarePiece extends Tetromino {
+
+	public SquarePiece() {
+		super(Math.round(TetrisBoard.RIGHT_X-5*TetrisBoard.TILE_DIMEN), 
+				Math.round(TetrisBoard.TOP_Y-2*TetrisBoard.TILE_DIMEN), 2, 2, false);
+		setTetrominoType("square");
+		drawSprite();
+	}
+	
+	@Override
+	public void drawSprite() {
+		tiles = new ArrayList<Tile>();
+
+		Tile t = new Tile(START_ROW, START_COL);
+		tiles.add(t);
+		s = t.getTile();
+		Tile t2 = new Tile(1, 0);
+		tiles.add(t2);
+		s.attachChild(t2.getTile());
+		Tile t3 = new Tile(1, 1);
+		tiles.add(t3);
+		s.attachChild(t3.getTile());
+		Tile t4 = new Tile(0, 1);
+		tiles.add(t4);
+		s.attachChild(t4.getTile());
+	}
+
+	@Override
+	public float getOrigHeight() {
+		return mHeight;
+	}
+
+	@Override
+	public float getOrigWidth() {
+		return mWidth;
+	}
+
+	@Override
+	public void rotate() {
+		s.setRotationCenter(TetrisBoard.TILE_DIMEN, TetrisBoard.TILE_DIMEN);
+		s.setRotation(s.getRotation()+90);
+	}
+	
+	public void checkLeftBound() {
+		s.setPosition(TetrisBoard.LEFT_X, s.getY());
+	}
+	
+	public void checkRightBound() {
+		switch (getRotationBy90()) {
+		case 0:
+			s.setPosition(TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN, s.getY());
+			break;
+		case 1:
+			s.setPosition(TetrisBoard.RIGHT_X-3*TetrisBoard.TILE_DIMEN, s.getY());
+			break;
+		case 2:
+			s.setPosition(TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN, s.getY());
+		default:
+			s.setPosition(TetrisBoard.RIGHT_X-getOrigHeight(), s.getY());
+			break;
+	}
+	}
+
+}

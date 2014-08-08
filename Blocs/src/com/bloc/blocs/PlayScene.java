@@ -27,7 +27,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	
 	public PhysicsWorld physicsWorld;
 	public Entity grid;
-	LogPiece tetrisPiece;
+	Tetromino tetrisPiece;
 	final TetrisBoard board;
 	
 	Sprite magLog;
@@ -66,21 +66,23 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 			public void onUpdate(float pSecondsElapsed) {
 				counter += pSecondsElapsed;
 				if (currentPiece != null ) {
-					if (currentPiece.getY()+tetrisPiece.getOrigHeight() >= TetrisBoard.BOTTOM_Y+TetrisBoard.TILE_DIMEN) {
-	//					Log.d("PlayScene", "COLLIDED! at "+currentPiece.getY());
+					if (currentPiece.getY()+tetrisPiece.getOrigHeight() >= TetrisBoard.BOTTOM_Y+TetrisBoard.TILE_DIMEN || !tetrisPiece.isClearBelow(board)) {
 						tetrisPiece.setMoveable(false);
 						float y = board.getGround().getY();
-						currentPiece.setPosition(currentPiece.getX(), y-tetrisPiece.getOrigHeight());
+						currentPiece.setPosition(currentPiece.getX(), currentPiece.getY());
+						//currentPiece.setPosition(currentPiece.getX(), y-tetrisPiece.getOrigHeight());
+						
+						//set tiles as filled 
+						tetrisPiece.fillTiles(board);
+						//check for filled row
+						board.checkRows();
+						
 						addNewPiece();
 					}
-					if (counter > 0.5 && tetrisPiece.isMoveable) {
+					if (counter > 0.2 && tetrisPiece.isMoveable) {
 						counter = 0;
-						Log.d("onUpdate", "x is "+currentPiece.getX());
+						//Log.d("onUpdate", "x is "+currentPiece.getX());
 						currentPiece.setPosition(currentPiece.getX(), currentPiece.getY()+board.TILE_DIMEN);
-					}
-			
-					if (currentPiece.getX() >= TetrisBoard.RIGHT_X) {
-						currentPiece.setPosition(TetrisBoard.RIGHT_X, currentPiece.getY());
 					}
 				}
 			}
@@ -117,40 +119,11 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
     			if (currentPiece.getX() + distanceMove <= TetrisBoard.LEFT_X) {
     				//currentPiece.setPosition(TetrisBoard.LEFT_X + TetrisBoard.TILE_DIMEN - tetrisPiece.getOrigWidth(), currentPiece.getY());
     				Log.d("playScene", "rotation by 90 "+tetrisPiece.getRotationBy90());
-    				switch (tetrisPiece.getRotationBy90()) {
-	    				case 0:
-	    					currentPiece.setPosition(TetrisBoard.LEFT_X, currentPiece.getY());
-	    					break;
-	    				case 1:
-	    					currentPiece.setPosition(TetrisBoard.LEFT_X+TetrisBoard.TILE_DIMEN, currentPiece.getY());    			
-	    					break;
-	    				case 2:
-	    					currentPiece.setPosition(TetrisBoard.LEFT_X-TetrisBoard.TILE_DIMEN, currentPiece.getY());
-	    					break;
-	    				case 3:
-	    					currentPiece.setPosition(TetrisBoard.LEFT_X+TetrisBoard.TILE_DIMEN, currentPiece.getY());
-	    					break;
-	    				default:
-	    					currentPiece.setPosition(TetrisBoard.LEFT_X, currentPiece.getY());
-	    					break;
-    				}
-    			
+    				tetrisPiece.checkLeftBound();
     			} else if (currentPiece.getX() + distanceMove + tetrisPiece.getOrigWidth() >= TetrisBoard.RIGHT_X) {
     				//currentPiece.setPosition(TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN-tetrisPiece.getOrigWidth(), currentPiece.getY());
     				Log.d("playScene", "rotation by 90 "+tetrisPiece.getRotationBy90());
-    				switch (tetrisPiece.getRotationBy90()) {
-	    				case 0:
-	    					currentPiece.setPosition(TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN, currentPiece.getY());
-	    					break;
-	    				case 1:
-	    					currentPiece.setPosition(TetrisBoard.RIGHT_X-3*TetrisBoard.TILE_DIMEN, currentPiece.getY());
-	    					break;
-	    				case 2:
-	    					currentPiece.setPosition(TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN, currentPiece.getY());
-	    				default:
-	    					currentPiece.setPosition(TetrisBoard.RIGHT_X-tetrisPiece.getOrigHeight(), currentPiece.getY());
-	    					break;
-    				}
+    				tetrisPiece.checkRightBound();
     			} else {
     				currentPiece.setPosition(currentPiece.getX() + distanceMove, currentPiece.getY());
     			}
@@ -177,15 +150,10 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	    return false;
 	}
 	
-	
 	public void addNewPiece() {
-	//	tetrisPiece = new TetrisPiece();
-		//currentPiece = tetrisPiece.getPiece();
-		//attachChild(currentPiece);
-		tetrisPiece = new LogPiece();
+		tetrisPiece = new SquarePiece();
 		currentPiece = tetrisPiece.getPiece();
 		attachChild(currentPiece);
-		
 	}
 
 }
