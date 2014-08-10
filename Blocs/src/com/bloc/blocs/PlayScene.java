@@ -68,14 +68,17 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 				if (currentPiece != null ) {
 					if (currentPiece.getY()+tetrisPiece.getOrigHeight() >= TetrisBoard.BOTTOM_Y+TetrisBoard.TILE_DIMEN || !tetrisPiece.isClearBelow(board)) {
 						tetrisPiece.setMoveable(false);
-						float y = board.getGround().getY();
 						currentPiece.setPosition(currentPiece.getX(), currentPiece.getY());
-						//currentPiece.setPosition(currentPiece.getX(), y-tetrisPiece.getOrigHeight());
-						
+						Log.d("onUpdate", "y is " + currentPiece.getY() + " x is "+currentPiece.getX());
 						//set tiles as filled 
 						tetrisPiece.fillTiles(board);
 						//check for filled row
 						board.checkRows();
+						//update grid
+						board.updateBooleanGrid();
+						//remove and redraw
+						detachChild(currentPiece);
+						board.redrawGrid(Blocs.getSharedInstance().mCurrentScene);
 						
 						addNewPiece();
 					}

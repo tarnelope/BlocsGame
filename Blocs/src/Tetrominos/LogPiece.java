@@ -192,8 +192,25 @@ public class LogPiece extends Tetromino {
 
 	@Override
 	public boolean isClearBelow(TetrisBoard board) {
-		// TODO Auto-generated method stub
-		return true;
+		float x = s.getX();
+		float y = s.getY();
+		Tile t;
+		switch (getRotationBy90()) {
+			case 0:
+				t = board.getTileAt(x, y+TetrisBoard.TILE_DIMEN*4);
+				if (t.isFilled()) {
+					return false;
+				} else {
+					return true;
+				}
+			case 1:
+				for (int i = 0; i < 4; i++) {
+					
+				}
+			default:
+				return true;
+		}
+		
 	};
 
 }

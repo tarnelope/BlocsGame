@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;boardArray&apos; in &apos;com.bloc.blocs.TetrisBoard&apos; to &apos;booleanGrid&apos;&#x0A;- Original project: &apos;Blocs&apos;&#x0A;- Original element: &apos;com.bloc.blocs.TetrisBoard.boardArray&apos;&#x0A;- Renamed element: &apos;com.bloc.blocs.TetrisBoard.booleanGrid&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;boardArray&apos;" flags="589826" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;com.bloc.blocs{TetrisBoard.java[TetrisBoard^boardArray" name="booleanGrid" references="true" setter="false" stamp="1407699419011" textual="false" version="1.0"/>
+</session>

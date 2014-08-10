@@ -62,21 +62,27 @@ public class SquarePiece extends Tetromino {
 		//Bottom left piece
 		float x = s.getX(); 
 		float y = s.getY();
-		Tile t1 = board.getTileAt(x, y);
+		
+		//Upper left piece
+		Tile t1 = board.getTileAt(x, y-TetrisBoard.TILE_DIMEN);
+		board.fillBooleanTileAt(x, y-TetrisBoard.TILE_DIMEN);
 		t1.setIsFilled(true);
 		t1.setTetromino(this);
-		//Bottom right piece
-		Tile t2 = board.getTileAt(x+TetrisBoard.TILE_DIMEN, y);
+		//Upper right piece
+		Tile t2 = board.getTileAt(x+TetrisBoard.TILE_DIMEN, y-TetrisBoard.TILE_DIMEN);
+		board.fillBooleanTileAt(x+TetrisBoard.TILE_DIMEN, y-TetrisBoard.TILE_DIMEN);
 		t2.setIsFilled(true);
 		t2.setTetromino(this);
-		//Upper right piece
-		Tile t3 = board.getTileAt(x+TetrisBoard.TILE_DIMEN, y-TetrisBoard.TILE_DIMEN);
+		//Bottom right piece
+		Tile t3 = board.getTileAt(x+TetrisBoard.TILE_DIMEN, y);
+		board.fillBooleanTileAt(x+TetrisBoard.TILE_DIMEN, y);
 		t3.setIsFilled(true);
 		t3.setTetromino(this);
-		//Upper left piece
-		Tile t4 = board.getTileAt(x, y-TetrisBoard.TILE_DIMEN);
-		t3.setIsFilled(true);
-		t3.setTetromino(this);
+		//Bottom left piece
+		Tile t4 = board.getTileAt(x, y);
+		board.fillBooleanTileAt(x, y);
+		t4.setIsFilled(true);
+		t4.setTetromino(this);
 	}
 
 	@Override
@@ -86,7 +92,7 @@ public class SquarePiece extends Tetromino {
 		Tile t1 = board.getTileAt(x, y+TetrisBoard.TILE_DIMEN);
 		Tile t2 = board.getTileAt(x+TetrisBoard.TILE_DIMEN, y+TetrisBoard.TILE_DIMEN);
 		if (t1.isFilled() || t2.isFilled()) {
-			Log.d("SquarePiece", "Is not clear below");
+			//Log.d("SquarePiece", "Is not clear below");
 			return false;
 		} else {
 			return true;
