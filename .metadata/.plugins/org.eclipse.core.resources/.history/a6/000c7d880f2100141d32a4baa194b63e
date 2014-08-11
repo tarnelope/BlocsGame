@@ -125,9 +125,8 @@ public class TetrisBoard {
 					mBooleanGrid[colNum][0] = false;
 				}
 			}
-			mFilledRows.clear();
 		}
-		
+		mFilledRows.clear();
 	}
 	
 	public void redrawGrid(Scene s) {

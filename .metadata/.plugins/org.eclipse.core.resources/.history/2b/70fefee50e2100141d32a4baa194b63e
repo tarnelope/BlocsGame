@@ -150,17 +150,8 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	}
 	
 	public void addNewPiece() {
-		int randomPiece = randInt(0, 1);
-		switch(randomPiece) {
-			case 0:
-				tetrisPiece = new LogPiece();
-				break;
-			case 1:
-				tetrisPiece = new SquarePiece();
-				break;
-			default:
-				tetrisPiece = new LogPiece();
-		}
+		int randomPiece = randInt(0, 7);
+		tetrisPiece = new LogPiece();
 		currentPiece = tetrisPiece.getPiece();
 		attachChild(currentPiece);
 	}
