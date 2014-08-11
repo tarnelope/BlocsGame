@@ -66,7 +66,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 			public void onUpdate(float pSecondsElapsed) {
 				counter += pSecondsElapsed;
 				if (currentPiece != null ) {
-					if (currentPiece.getY()+tetrisPiece.getOrigHeight() >= TetrisBoard.BOTTOM_Y+TetrisBoard.TILE_DIMEN || !tetrisPiece.isClearBelow(board)) {
+					if (/*currentPiece.getY()+tetrisPiece.getOrigHeight() >= TetrisBoard.BOTTOM_Y+TetrisBoard.TILE_DIMEN || */!tetrisPiece.isClearBelow(board)) {
 						tetrisPiece.setMoveable(false);
 						currentPiece.setPosition(currentPiece.getX(), currentPiece.getY());
 						Log.d("onUpdate", "y is " + currentPiece.getY() + " x is "+currentPiece.getX());
@@ -120,20 +120,14 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
     			distanceMove = (TetrisBoard.TILE_DIMEN * tilesMoved);
     			
     			if (currentPiece.getX() + distanceMove <= TetrisBoard.LEFT_X) {
-    				//currentPiece.setPosition(TetrisBoard.LEFT_X + TetrisBoard.TILE_DIMEN - tetrisPiece.getOrigWidth(), currentPiece.getY());
-    				Log.d("playScene", "rotation by 90 "+tetrisPiece.getRotationBy90());
+
     				tetrisPiece.checkLeftBound();
     			} else if (currentPiece.getX() + distanceMove + tetrisPiece.getOrigWidth() >= TetrisBoard.RIGHT_X) {
-    				//currentPiece.setPosition(TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN-tetrisPiece.getOrigWidth(), currentPiece.getY());
-    				Log.d("playScene", "rotation by 90 "+tetrisPiece.getRotationBy90());
+
     				tetrisPiece.checkRightBound();
     			} else {
     				currentPiece.setPosition(currentPiece.getX() + distanceMove, currentPiece.getY());
     			}
-    			/*if (currentPiece.getX()+distanceMove >= TetrisBoard.LEFT_X &&
-    					currentPiece.getX()+tetrisPiece.getOrigWidth()+distanceMove <= TetrisBoard.RIGHT_X) {
-    				currentPiece.setPosition(currentPiece.getX() + distanceMove, currentPiece.getY());
-    			}*/
     			
 				originX += (tilesMoved * MOVE_TOUCH_THRESHOLD); // Move logical origin to prevent large jumps after move
     		}
@@ -154,7 +148,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	}
 	
 	public void addNewPiece() {
-		tetrisPiece = new SquarePiece();
+		tetrisPiece = new LogPiece();
 		currentPiece = tetrisPiece.getPiece();
 		attachChild(currentPiece);
 	}

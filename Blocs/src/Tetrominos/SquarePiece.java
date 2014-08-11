@@ -89,9 +89,7 @@ public class SquarePiece extends Tetromino {
 	public boolean isClearBelow(TetrisBoard board) {
 		float x = s.getX();
 		float y = s.getY();
-		Tile t1 = board.getTileAt(x, y+TetrisBoard.TILE_DIMEN);
-		Tile t2 = board.getTileAt(x+TetrisBoard.TILE_DIMEN, y+TetrisBoard.TILE_DIMEN);
-		if (t1.isFilled() || t2.isFilled()) {
+		if (board.isBooleanTileFilled(x, y+TetrisBoard.TILE_DIMEN) || board.isBooleanTileFilled(x+TetrisBoard.TILE_DIMEN, y+TetrisBoard.TILE_DIMEN)) {
 			//Log.d("SquarePiece", "Is not clear below");
 			return false;
 		} else {

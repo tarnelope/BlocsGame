@@ -69,7 +69,21 @@ public class TetrisBoard {
 	public void fillBooleanTileAt(float x, float y) {
 		int colNum = Math.round((x-LEFT_X)/TILE_DIMEN);
 		int rowNum = Math.round((y-TOP_Y+TetrisBoard.TILE_DIMEN)/TILE_DIMEN);
-		mBooleanGrid[colNum][rowNum] = true;
+		Log.d("boolean grid filled at", "col is "+colNum+" row is "+rowNum);
+		if (colNum < NUM_COLUMNS && rowNum < NUM_ROWS && colNum >-1 && rowNum > -1) {
+			mBooleanGrid[colNum][rowNum] = true;
+		} 
+	}
+	
+	public boolean isBooleanTileFilled(float x, float y) {
+		int colNum = Math.round((x-LEFT_X)/TILE_DIMEN);
+		int rowNum = Math.round((y-TOP_Y+TetrisBoard.TILE_DIMEN)/TILE_DIMEN);
+		if (colNum < NUM_COLUMNS && rowNum < NUM_ROWS && colNum >-1 && rowNum > -1) {
+			//Log.d("isBooleanTileFilled", "rowNum is "+rowNum+" colNum is "+colNum);
+			return mBooleanGrid[colNum][rowNum];
+		} else {
+			return true;
+		}
 	}
 	
 	public void checkRows() {
@@ -79,8 +93,9 @@ public class TetrisBoard {
 			
 			//Iterated through an entire row
 			for (int j = 0; j < NUM_COLUMNS; j++) {
-				Tile t = mTileArray[j][i];
-				if (!t.isFilled()) {
+				//Tile t = mTileArray[j][i];
+				//if (!t.isFilled()) {
+				if (mBooleanGrid[j][i] == false) {
 					allFilled = false;
 				} else { //update the boolean grid
 					mBooleanGrid[j][i] = true;
