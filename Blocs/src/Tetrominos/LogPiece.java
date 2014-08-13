@@ -148,7 +148,7 @@ public class LogPiece extends Tetromino {
 				//2nd left
 				Tile t2a = board.getTileAt(x, y);
 				board.fillBooleanTileAt(x, y);
-				t2a.setIsFilled(true);
+				//t2a.setIsFilled(true);
 				t2a.setTetromino(this);
 				//3rd left
 				Tile t3a = board.getTileAt(x+TetrisBoard.TILE_DIMEN, y);

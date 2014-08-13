@@ -69,7 +69,7 @@ public class SquarePiece extends Tetromino {
 		t1.setIsFilled(true);
 		t1.setTetromino(this);
 		//Upper right piece
-		Tile t2 = board.getTileAt(x+TetrisBoard.TILE_DIMEN, y-TetrisBoard.TILE_DIMEN);
+ 		Tile t2 = board.getTileAt(x+TetrisBoard.TILE_DIMEN, y-TetrisBoard.TILE_DIMEN);
 		board.fillBooleanTileAt(x+TetrisBoard.TILE_DIMEN, y-TetrisBoard.TILE_DIMEN);
 		t2.setIsFilled(true);
 		t2.setTetromino(this);

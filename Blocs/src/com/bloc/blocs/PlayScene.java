@@ -79,12 +79,12 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 						//update grid
 						board.updateBooleanGrid();
 						//remove and redraw
-						detachChild(currentPiece);
-						board.redrawGrid(Blocs.getSharedInstance().mCurrentScene);
+						detachChildren();
+						board.drawGrid(Blocs.getSharedInstance().mCurrentScene);
 						
 						addNewPiece();
 					}
-					if (counter > 0.2 && tetrisPiece.isMoveable) {
+					if (counter > 0.1 && tetrisPiece.isMoveable) {
 						counter = 0;
 						//Log.d("onUpdate", "x is "+currentPiece.getX());
 						currentPiece.setPosition(currentPiece.getX(), currentPiece.getY()+board.TILE_DIMEN);

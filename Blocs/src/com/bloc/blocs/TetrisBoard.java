@@ -13,6 +13,7 @@ public class TetrisBoard {
 	private final static String TAG = "TetrisBoard";
 	
 	Camera mCamera;
+	Scene mScene;
 	private TetrisBoard instance;
 	
 	public final static int BOARD_WIDTH = 300;
@@ -41,18 +42,8 @@ public class TetrisBoard {
 		
 		mBooleanGrid = new boolean[NUM_COLUMNS][NUM_ROWS];
 		mTileArray = new Tile[NUM_COLUMNS][NUM_ROWS];
-		
-		for (int col = 0; col < NUM_COLUMNS; col++) {
-			for (int row = 0; row < NUM_ROWS; row++) {
-				float x = TILE_DIMEN*col + LEFT_X;
-				float y = TILE_DIMEN*row + TOP_Y;
-				Tile tile = new Tile(row, col, x, y, TILE_DIMEN, TILE_DIMEN, Blocs.getSharedInstance().grayTile);
-				mBooleanGrid[col][row] = tile.isFilled(); //Should be entirely false
-				mTileArray[col][row] = tile;
-
-				s.attachChild(tile.getTile());
-			}
-		}
+		mScene = s;
+		drawGrid(s);
 	}
 	
 	public Tile getTileAt(float x, float y) {
@@ -86,6 +77,9 @@ public class TetrisBoard {
 		}
 	}
 	
+	/*
+	 * Purpose: To detect filled rows and add their index to the mFilledRows integer array.
+	 */
 	public void checkRows() {
 		for (int i = NUM_ROWS-1; i >= 0; i--) {
 			
@@ -93,8 +87,6 @@ public class TetrisBoard {
 			
 			//Iterated through an entire row
 			for (int j = 0; j < NUM_COLUMNS; j++) {
-				//Tile t = mTileArray[j][i];
-				//if (!t.isFilled()) {
 				if (mBooleanGrid[j][i] == false) {
 					allFilled = false;
 				} else { //update the boolean grid
@@ -103,21 +95,25 @@ public class TetrisBoard {
 			}
 			//What to do when we detect row is all filled
 			if (allFilled) {
-				Log.d(TAG, "All filled!");
+				Log.d(TAG, "Row "+i+" is filled!");
 				mFilledRows.add(i);
 			}
 		}
 	}
 	
 	public void updateBooleanGrid() {
-		if (mFilledRows.size() != 0) {
+		//If there are filled rows then...
+		if (mFilledRows.size() != 0) { 
 			//This will count rows from bottom to top
 			for (int rowNum:mFilledRows) {
 				
-				for (int aboveRows = rowNum-1; aboveRows >= 0; aboveRows--) {
+				//for (starting at the row above a filled row, as long as the number is greater than equal to 0, then decrement counter by 1)
+				//This for loop is not working because only the filled are getting updated. They would need to decrement as well.
+				for (int curRow = rowNum; curRow > 0; curRow--) {
 					for (int colNum = 0; colNum < NUM_COLUMNS; colNum++) {
-						mBooleanGrid[colNum][rowNum] = mBooleanGrid[colNum][aboveRows];
-					}
+						mBooleanGrid[colNum][curRow] = mBooleanGrid[colNum][curRow-1];
+					}	
+					
 				}
 				
 				//Create new row at top.
@@ -127,7 +123,26 @@ public class TetrisBoard {
 			}
 			mFilledRows.clear();
 		}
-		
+	}
+	
+	public void drawGrid(Scene s) {
+		Tile tile;
+		for (int col = 0; col < NUM_COLUMNS; col++) {
+			for (int row = 0; row < NUM_ROWS; row++) {
+				float x = TILE_DIMEN*col + LEFT_X;
+				float y = TILE_DIMEN*row + TOP_Y;
+
+				if (mBooleanGrid[col][row] == true ) {
+					tile = new Tile(row, col, x, y, TILE_DIMEN, TILE_DIMEN, Blocs.getSharedInstance().cyanTile);
+					tile.setIsFilled(true);
+				} else {
+					tile = new Tile(row, col, x, y, TILE_DIMEN, TILE_DIMEN, Blocs.getSharedInstance().grayTile);
+					mBooleanGrid[col][row] = tile.isFilled(); //Should be entirely false
+				}
+				mTileArray[col][row] = tile;
+				s.attachChild(tile.getTile());
+			}
+		}
 	}
 	
 	public void redrawGrid(Scene s) {
@@ -141,6 +156,7 @@ public class TetrisBoard {
 					tile.setIsFilled(true);
 				} else {
 					tile = new Tile(row, col, x, y, TILE_DIMEN, TILE_DIMEN, Blocs.getSharedInstance().grayTile);
+					mBooleanGrid[col][row] = tile.isFilled(); //Should be entirely false
 				}
 				
 				mTileArray[col][row] = tile;
