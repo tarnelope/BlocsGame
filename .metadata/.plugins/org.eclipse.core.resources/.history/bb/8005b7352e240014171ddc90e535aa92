@@ -219,7 +219,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	
 	public void addNewPiece() {
 		int randomPiece = randInt(0, 4);
-		switch(1) {
+		switch(5) {
 			case 0:
 				tetrisPiece = new LogPiece();
 				break;

@@ -114,8 +114,9 @@ public class TetrisBoard {
 	public void updateBooleanGrid() {
 		//If there are filled rows then...
 		if (mFilledRows.size() != 0) { 
-			for (int i = 0; i < mFilledRows.size(); i++)	{
-				int rowNum = mFilledRows.get(i) + i;
+			//This will count rows from bottom to top
+			for (int rowNum:mFilledRows) {
+				
 				for (int curRow = rowNum; curRow > 0; curRow--) {
 					for (int colNum = 0; colNum < NUM_COLUMNS; colNum++) {
 						mBooleanGrid[colNum][curRow] = mBooleanGrid[colNum][curRow-1];

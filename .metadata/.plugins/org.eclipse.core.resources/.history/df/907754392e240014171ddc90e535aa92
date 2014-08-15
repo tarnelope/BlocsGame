@@ -170,7 +170,7 @@ public class SPiece extends Tetromino {
 					if (i == 2) {
 						b3 = board.isBooleanTileFilled(x+(i*TetrisBoard.TILE_DIMEN), y);
 					} else {
-						b3 = board.isBooleanTileFilled(x+(i*TetrisBoard.TILE_DIMEN), y+TetrisBoard.TILE_DIMEN);
+						b3 = board.isBooleanTileFilled(x+(i*TetrisBoard.TILE_DIMEN), y);
 					}
 					if (b3) {
 						return false;

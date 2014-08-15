@@ -94,7 +94,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 						//check for filled row
 						board.checkRows();
 						//update grid
-						board.updateBooleanGrid();
+						//board.updateBooleanGrid();
 						//remove and redraw
 						detachChildren();
 						board.drawGrid(Blocs.getSharedInstance().mCurrentScene);
@@ -219,7 +219,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	
 	public void addNewPiece() {
 		int randomPiece = randInt(0, 4);
-		switch(1) {
+		switch(5) {
 			case 0:
 				tetrisPiece = new LogPiece();
 				break;
