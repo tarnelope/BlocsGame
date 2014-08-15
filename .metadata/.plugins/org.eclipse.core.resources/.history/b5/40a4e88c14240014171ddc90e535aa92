@@ -1,0 +1,74 @@
+package Tetrominos;
+
+import com.bloc.blocs.TetrisBoard;
+import com.bloc.blocs.Tile;
+
+public class TPiece extends Tetromino {
+
+	public TPiece(int x, int y, int numTilesWide, int numTilesTall,
+			boolean orientation) {
+		super(x, y, numTilesWide, numTilesTall, orientation);
+		setTetrominoType("t");
+		drawSprite();
+	}
+
+	@Override
+	protected void drawSprite() {
+		Tile t = new Tile(START_ROW, START_COL);
+		tiles.add(t);
+		s = t.getTile();
+		Tile t2 = new Tile(1, 0);
+		tiles.add(t2);
+		s.attachChild(t2.getTile());
+		Tile t3 = new Tile(1, 1);
+		tiles.add(t3);
+		s.attachChild(t3.getTile());
+		Tile t4 = new Tile(0, 1);
+		tiles.add(t4);
+		s.attachChild(t4.getTile());
+		
+	}
+
+	@Override
+	public void rotate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public float getOrigHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getOrigWidth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void checkLeftBound() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void checkRightBound() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void fillTiles(TetrisBoard board) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isClearBelow(TetrisBoard board) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

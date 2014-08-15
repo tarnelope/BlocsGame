@@ -3,17 +3,14 @@ package com.bloc.blocs;
 import java.util.ArrayList;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
-
-import android.util.Log;
 
 public class TetrisBoard {
 	
 	private final static String TAG = "TetrisBoard";
 	
 	Camera mCamera;
-	Scene mScene;
+	PlayScene mScene;
 	private TetrisBoard instance;
 	
 	public final static int BOARD_WIDTH = 300;
@@ -32,13 +29,13 @@ public class TetrisBoard {
 	ArrayList<Integer> mFilledRows = new ArrayList<Integer>();
 	private Tile[][] mTileArray;;
 	
-	public TetrisBoard getTetrisBoardInstance(Scene s) {
+	public TetrisBoard getTetrisBoardInstance(PlayScene s) {
 		if (instance == null)
 			instance = new TetrisBoard(s);
 		return instance;
 	}
 	
-	public TetrisBoard(Scene s) {
+	public TetrisBoard(PlayScene s) {
 		
 		mBooleanGrid = new boolean[NUM_COLUMNS][NUM_ROWS];
 		mTileArray = new Tile[NUM_COLUMNS][NUM_ROWS];
@@ -60,7 +57,6 @@ public class TetrisBoard {
 	public void fillBooleanTileAt(float x, float y) {
 		int colNum = Math.round((x-LEFT_X)/TILE_DIMEN);
 		int rowNum = Math.round((y-TOP_Y+TetrisBoard.TILE_DIMEN)/TILE_DIMEN);
-		Log.d("boolean grid filled at", "col is "+colNum+" row is "+rowNum);
 		if (colNum < NUM_COLUMNS && rowNum < NUM_ROWS && colNum >-1 && rowNum > -1) {
 			mBooleanGrid[colNum][rowNum] = true;
 		} 
@@ -70,7 +66,6 @@ public class TetrisBoard {
 		int colNum = Math.round((x-LEFT_X)/TILE_DIMEN);
 		int rowNum = Math.round((y-TOP_Y+TetrisBoard.TILE_DIMEN)/TILE_DIMEN);
 		if (colNum < NUM_COLUMNS && rowNum < NUM_ROWS && colNum >-1 && rowNum > -1) {
-			//Log.d("isBooleanTileFilled", "rowNum is "+rowNum+" colNum is "+colNum);
 			return mBooleanGrid[colNum][rowNum];
 		} else {
 			return true;
@@ -95,7 +90,7 @@ public class TetrisBoard {
 			}
 			//What to do when we detect row is all filled
 			if (allFilled) {
-				Log.d(TAG, "Row "+i+" is filled!");
+				mScene.addToScore(10);
 				mFilledRows.add(i);
 			}
 		}

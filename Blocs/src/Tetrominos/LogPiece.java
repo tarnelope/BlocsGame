@@ -1,7 +1,5 @@
 package Tetrominos;
 
-import java.util.ArrayList;
-
 import android.util.Log;
 
 import com.bloc.blocs.TetrisBoard;
@@ -21,7 +19,6 @@ public class LogPiece extends Tetromino {
 	
 	@Override
 	public void drawSprite() {
-		tiles = new ArrayList<Tile>();
 
 		Tile t = new Tile(START_ROW, START_COL);
 		for (int i = 0; i < NUM_OF_TILES; i++) {

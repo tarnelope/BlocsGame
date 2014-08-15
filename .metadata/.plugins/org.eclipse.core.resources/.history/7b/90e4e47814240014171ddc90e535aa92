@@ -1,0 +1,61 @@
+package Tetrominos;
+
+import com.bloc.blocs.TetrisBoard;
+
+public class TPiece extends Tetromino {
+
+	public TPiece(int x, int y, int numTilesWide, int numTilesTall,
+			boolean orientation) {
+		super(x, y, numTilesWide, numTilesTall, orientation);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	protected void drawSprite() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rotate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public float getOrigHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getOrigWidth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void checkLeftBound() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void checkRightBound() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void fillTiles(TetrisBoard board) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isClearBelow(TetrisBoard board) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}
