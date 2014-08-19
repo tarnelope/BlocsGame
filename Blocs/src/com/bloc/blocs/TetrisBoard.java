@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.Scene;
 
+import android.util.Log;
+
 public class TetrisBoard {
 	
 	private final static String TAG = "TetrisBoard";
@@ -63,6 +65,9 @@ public class TetrisBoard {
 	}
 	
 	public boolean isBooleanTileFilled(float x, float y) {
+		if (x == 120) {
+			Log.d(TAG, "x is "+x+" y is "+y);
+		}
 		int colNum = Math.round((x-LEFT_X)/TILE_DIMEN);
 		int rowNum = Math.round((y-TOP_Y+TetrisBoard.TILE_DIMEN)/TILE_DIMEN);
 		if (colNum < NUM_COLUMNS && rowNum < NUM_ROWS && colNum >-1 && rowNum > -1) {

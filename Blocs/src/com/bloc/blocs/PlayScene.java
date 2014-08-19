@@ -35,6 +35,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	Camera mCamera;
 	SurfaceGestureDetector gDetector;
 	PlayScene scene;
+	private IUpdateHandler mUpdateHandler;
 	
 	private HUD mHud;
 	private Text mScoreText;
@@ -46,13 +47,12 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	public Entity grid;
 	Tetromino tetrisPiece;
 	final TetrisBoard board;
-	
-	Sprite magLog;
+
 	public Sprite currentPiece;
 	
-	private float counter = 0.0f;
+	private boolean mIsPaused = false;
 	
-	private float mGamePace = 0.1f;
+	private float mGamePace = 0.5f;
 	
 	public PlayScene getPlayScene() {
 		if (scene == null) {
@@ -71,13 +71,11 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 		board = new TetrisBoard(this);
 
 		addNewPiece();
-	
-		registerUpdateHandler(new IUpdateHandler() {
+		
+		mUpdateHandler = new IUpdateHandler() {
 			
 			@Override
 			public void reset() {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			float counter = 0;
@@ -85,7 +83,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 			public void onUpdate(float pSecondsElapsed) {
 				counter += pSecondsElapsed;
 				if (currentPiece != null ) {
-					if (/*currentPiece.getY()+tetrisPiece.getOrigHeight() >= TetrisBoard.BOTTOM_Y+TetrisBoard.TILE_DIMEN || */!tetrisPiece.isClearBelow(board)) {
+					if (!tetrisPiece.isClearBelow(board)) {
 						tetrisPiece.setMoveable(false);
 						currentPiece.setPosition(currentPiece.getX(), currentPiece.getY());
 						Log.d("onUpdate", "y is " + currentPiece.getY() + " x is "+currentPiece.getX());
@@ -103,11 +101,13 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 					}
 					if (counter > mGamePace && tetrisPiece.isMoveable) {
 						counter = 0;
-						currentPiece.setPosition(currentPiece.getX(), currentPiece.getY()+board.TILE_DIMEN);
+						currentPiece.setPosition(currentPiece.getX(), currentPiece.getY()+TetrisBoard.TILE_DIMEN);
 					}
 				}
 			}
-		});
+		};
+	
+		registerUpdateHandler(mUpdateHandler);
 		
 		createHUD();
 		
@@ -147,8 +147,16 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 		mScoreText.setText("Score: "+mScore);
 	}
 	
-	private void addPauseButton() {
+	private void createPauseButton() {
 		
+	}
+	
+	private void pauseGame() {
+		if (!mIsPaused) {
+			this.unregisterUpdateHandler(mUpdateHandler);
+		} else {
+			this.registerUpdateHandler(mUpdateHandler);
+		}
 	}
 	
 	/*
@@ -219,7 +227,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	
 	public void addNewPiece() {
 		int randomPiece = randInt(0, 4);
-		switch(1) {
+		switch(5) {
 			case 0:
 				tetrisPiece = new LogPiece();
 				break;

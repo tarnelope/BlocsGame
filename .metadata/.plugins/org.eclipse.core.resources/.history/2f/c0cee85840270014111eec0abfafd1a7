@@ -1,0 +1,217 @@
+package Tetrominos;
+
+import android.util.Log;
+
+import com.bloc.blocs.TetrisBoard;
+import com.bloc.blocs.Tile;
+
+public class SPiece extends Tetromino {
+
+
+	public SPiece() {
+		super(Math.round(TetrisBoard.RIGHT_X-6*TetrisBoard.TILE_DIMEN), 
+				Math.round(TetrisBoard.TOP_Y-2*TetrisBoard.TILE_DIMEN), 3, 2, false);
+		setTetrominoType("S");
+		drawSprite();
+	}
+	
+	@Override
+	public void drawSprite() {
+
+		Tile t = new Tile(START_ROW, START_COL);
+		tiles.add(t);
+		s = t.getTile();
+		
+		Tile t2 = new Tile(-1, 0);
+		tiles.add(t2);
+		s.attachChild(t2.getTile());
+		Tile t3 = new Tile(-1, 1);
+		tiles.add(t3);
+		s.attachChild(t3.getTile());
+		Tile t4 = new Tile(0, -1);
+		tiles.add(t4);
+		s.attachChild(t4.getTile());
+	}
+
+	@Override
+	public float getOrigHeight() {
+		return mHeight;
+	}
+
+	@Override
+	public float getOrigWidth() {
+		return mWidth;
+	}
+
+	@Override
+	public void rotate() {
+		s.setRotation(s.getRotation()+90);
+	}
+	
+	public void checkLeftBound() {
+		s.setPosition(TetrisBoard.LEFT_X, s.getY());
+	}
+	
+	public void checkRightBound() {
+		s.setPosition(TetrisBoard.RIGHT_X-2*TetrisBoard.TILE_DIMEN, s.getY());
+	}
+	
+	public void fillTiles(TetrisBoard board) {
+		float x = s.getX(); 
+		float y = s.getY();
+		
+		switch (getRotationBy90()) {
+			//S
+			case 0:
+				Log.d("SPiece fillTiles case 0", "x is "+x+" y is "+y);
+				//Bottom Right
+				Tile t1 = board.getTileAt(x, y);
+				board.fillBooleanTileAt(x, y);
+				t1.setIsFilled(true);
+				t1.setTetromino(this);
+				//Top Left
+				Tile t2 = board.getTileAt(x, y-TetrisBoard.TILE_DIMEN);
+				board.fillBooleanTileAt(x, y-TetrisBoard.TILE_DIMEN);
+				t2.setIsFilled(true);
+				t2.setTetromino(this);
+				//Top Right
+				Tile t3 = board.getTileAt(x+TetrisBoard.TILE_DIMEN, y-TetrisBoard.TILE_DIMEN);
+				board.fillBooleanTileAt(x+TetrisBoard.TILE_DIMEN, y-TetrisBoard.TILE_DIMEN);
+				t3.setIsFilled(true);
+				t3.setTetromino(this);
+				//Bottom Left
+				Tile t4 = board.getTileAt(x-TetrisBoard.TILE_DIMEN, y);
+				board.fillBooleanTileAt(x-TetrisBoard.TILE_DIMEN, y);
+				t4.setIsFilled(true);
+				t4.setTetromino(this);
+				break;
+			case 1: 
+				//Top Left	
+				Tile t1a = board.getTileAt(x, y-TetrisBoard.TILE_DIMEN);
+				board.fillBooleanTileAt(x, y-TetrisBoard.TILE_DIMEN);
+				t1a.setIsFilled(true);
+				t1a.setTetromino(this);
+				//Bottom Left
+				Tile t2a = board.getTileAt(x, y);
+				board.fillBooleanTileAt(x, y);
+				//t2a.setIsFilled(true);
+				t2a.setTetromino(this);
+				//Top Right
+				Tile t3a = board.getTileAt(x+TetrisBoard.TILE_DIMEN, y);
+				board.fillBooleanTileAt(x+TetrisBoard.TILE_DIMEN, y);
+				t3a.setIsFilled(true);
+				t3a.setTetromino(this);
+				//Bottom Right
+				Tile t4a = board.getTileAt(x+TetrisBoard.TILE_DIMEN, y+TetrisBoard.TILE_DIMEN);
+				board.fillBooleanTileAt(x+TetrisBoard.TILE_DIMEN, y+TetrisBoard.TILE_DIMEN);
+				t4a.setIsFilled(true);
+				t4a.setTetromino(this);
+				break;
+			case 2: 
+				//Bottom Left
+				Tile t1b = board.getTileAt(x-TetrisBoard.TILE_DIMEN, y-TetrisBoard.TILE_DIMEN);
+				board.fillBooleanTileAt(x-TetrisBoard.TILE_DIMEN, y-TetrisBoard.TILE_DIMEN);
+				t1b.setIsFilled(true);
+				t1b.setTetromino(this);
+				//Top Right
+				Tile t2b = board.getTileAt(x+TetrisBoard.TILE_DIMEN, y);
+				board.fillBooleanTileAt(x+TetrisBoard.TILE_DIMEN, y);
+				t2b.setIsFilled(true);
+				t2b.setTetromino(this);
+				//Bottom Right
+				Tile t3b = board.getTileAt(x, y+TetrisBoard.TILE_DIMEN);
+				board.fillBooleanTileAt(x, y+TetrisBoard.TILE_DIMEN);
+				t3b.setIsFilled(true);
+				t3b.setTetromino(this);
+				//Top Left
+				Tile t4b = board.getTileAt(x, y);
+				board.fillBooleanTileAt(x, y);
+				t4b.setIsFilled(true);
+				t4b.setTetromino(this);
+				break;
+			case 3:
+				//Bottom Left
+				Tile t1c = board.getTileAt(x-TetrisBoard.TILE_DIMEN, y);
+				board.fillBooleanTileAt(x-TetrisBoard.TILE_DIMEN, y);
+				t1c.setIsFilled(true);
+				t1c.setTetromino(this);
+				//Top Right
+				Tile t2c = board.getTileAt(x, y);
+				board.fillBooleanTileAt(x, y);
+				t2c.setIsFilled(true);
+				t2c.setTetromino(this);
+				//Bottom Right
+				Tile t3c = board.getTileAt(x, y+TetrisBoard.TILE_DIMEN);
+				board.fillBooleanTileAt(x, y+TetrisBoard.TILE_DIMEN);
+				t3c.setIsFilled(true);
+				t3c.setTetromino(this);
+				//Top Left
+				Tile t4c = board.getTileAt(x-TetrisBoard.TILE_DIMEN, y-TetrisBoard.TILE_DIMEN);
+				board.fillBooleanTileAt(x-TetrisBoard.TILE_DIMEN, y-TetrisBoard.TILE_DIMEN);
+				t4c.setIsFilled(true);
+				t4c.setTetromino(this);
+				break;
+		}
+	}
+	
+/*THIS IS STILL BROKEN*/
+	@Override
+	public boolean isClearBelow(TetrisBoard board) {
+		float x = s.getX();
+		float y = s.getY();
+		
+		switch (getRotationBy90()) {
+			case 0:
+				x = x-TetrisBoard.TILE_DIMEN;
+				boolean b3 = false;
+				for (int i = 0; i < 3; i++) {
+					if (i == 2) {
+						//b3 = board.isBooleanTileFilled(x+(i*TetrisBoard.TILE_DIMEN), y+TetrisBoard.TILE_DIMEN);
+						b3 = false;
+					} else {
+						//b3 = board.isBooleanTileFilled(x+(i*TetrisBoard.TILE_DIMEN), y+TetrisBoard.TILE_DIMEN);
+						b3 = false;
+					}
+					if (b3) {
+						Log.d("S piece is is filled at ", "Current block is " + String.valueOf(i));
+						return false;
+					}
+				}
+				
+				
+			case 1:
+
+				if (board.isBooleanTileFilled(x+TetrisBoard.TILE_DIMEN, y+TetrisBoard.TILE_DIMEN*2) || board.isBooleanTileFilled(x, y+TetrisBoard.TILE_DIMEN)) {
+					return false;
+				} else {
+					return true;
+				}
+				
+			case 2:
+				x = x-TetrisBoard.TILE_DIMEN;
+				boolean b1;
+				for (int i = 0; i < 3; i++) {
+					if (i == 2) {
+						b1 = board.isBooleanTileFilled(x+(i*TetrisBoard.TILE_DIMEN), y+TetrisBoard.TILE_DIMEN);
+					} else {
+						b1 = board.isBooleanTileFilled(x+(i*TetrisBoard.TILE_DIMEN), y+TetrisBoard.TILE_DIMEN*2);
+					}
+					if (b1) {
+						return false;
+					}
+				}
+			case 3:
+				
+				if (board.isBooleanTileFilled(x, y+TetrisBoard.TILE_DIMEN*2) || board.isBooleanTileFilled(x-TetrisBoard.TILE_DIMEN, y+TetrisBoard.TILE_DIMEN)) {
+					Log.d("case 0 is NOT clear below", "x is "+x+" y is "+y);
+					return false;
+				} else {
+					return true;
+				}
+				
+				
+			default:
+				return true;
+		}
+	}
+}

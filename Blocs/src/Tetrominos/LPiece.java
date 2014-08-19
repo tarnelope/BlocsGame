@@ -61,7 +61,7 @@ public class LPiece extends Tetromino {
 		float y = s.getY();
 		
 		switch (getRotationBy90()) {
-			//J
+			//L
 			case 0:
 				Log.d("fillTiles case 0", "x is "+x+" y is "+y);
 				//Center

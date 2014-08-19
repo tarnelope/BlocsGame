@@ -35,7 +35,6 @@
 <fullyQualifiedTypeName name="org.andengine.entity.scene.background.Background"/>
 <fullyQualifiedTypeName name="org.andengine.engine.camera.Camera"/>
 <fullyQualifiedTypeName name="org.andengine.entity.Entity"/>
-<fullyQualifiedTypeName name="com.bloc.blocs.Blocs"/>
 <fullyQualifiedTypeName name="org.andengine.engine.handler.IUpdateHandler"/>
 <fullyQualifiedTypeName name="com.bloc.blocs.PlayScene"/>
 <fullyQualifiedTypeName name="org.andengine.engine.handler.timer.TimerHandler"/>
@@ -43,4 +42,6 @@
 <fullyQualifiedTypeName name="com.bloc.blocs.LogPiece"/>
 <fullyQualifiedTypeName name="android.util.Log"/>
 <fullyQualifiedTypeName name="com.bloc.blocs.TetrisBoard"/>
+<fullyQualifiedTypeName name="org.andengine.entity.sprite.Sprite"/>
+<fullyQualifiedTypeName name="com.bloc.blocs.Blocs"/>
 </qualifiedTypeNameHistroy>

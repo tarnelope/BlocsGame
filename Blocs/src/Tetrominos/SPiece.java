@@ -1,7 +1,10 @@
 package Tetrominos;
 
+import org.andengine.entity.sprite.Sprite;
+
 import android.util.Log;
 
+import com.bloc.blocs.Blocs;
 import com.bloc.blocs.TetrisBoard;
 import com.bloc.blocs.Tile;
 
@@ -10,17 +13,18 @@ public class SPiece extends Tetromino {
 
 	public SPiece() {
 		super(Math.round(TetrisBoard.RIGHT_X-6*TetrisBoard.TILE_DIMEN), 
-				Math.round(TetrisBoard.TOP_Y-2*TetrisBoard.TILE_DIMEN), 3, 2, false);
+				Math.round(TetrisBoard.TOP_Y+TetrisBoard.TILE_DIMEN), 1, 1, false);
 		setTetrominoType("S");
 		drawSprite();
 	}
 	
 	@Override
 	public void drawSprite() {
-
+		
 		Tile t = new Tile(START_ROW, START_COL);
 		tiles.add(t);
 		s = t.getTile();
+		//s = new Sprite(270, 60, TetrisBoard.TILE_DIMEN, TetrisBoard.TILE_DIMEN, Blocs.getSharedInstance().cyanTile, Blocs.getSharedInstance().getVertexBufferObjectManager());
 		
 		Tile t2 = new Tile(-1, 0);
 		tiles.add(t2);
@@ -30,7 +34,10 @@ public class SPiece extends Tetromino {
 		s.attachChild(t3.getTile());
 		Tile t4 = new Tile(0, -1);
 		tiles.add(t4);
-		s.attachChild(t4.getTile());
+		s.attachChild(t4.getTile()); 
+		
+		//s.setRotationCenter(0, -TetrisBoard.TILE_DIMEN);
+		
 	}
 
 	@Override
@@ -87,8 +94,8 @@ public class SPiece extends Tetromino {
 				break;
 			case 1: 
 				//Top Left	
-				Tile t1a = board.getTileAt(x-TetrisBoard.TILE_DIMEN, y);
-				board.fillBooleanTileAt(x-TetrisBoard.TILE_DIMEN, y);
+				Tile t1a = board.getTileAt(x, y-TetrisBoard.TILE_DIMEN);
+				board.fillBooleanTileAt(x, y-TetrisBoard.TILE_DIMEN);
 				t1a.setIsFilled(true);
 				t1a.setTetromino(this);
 				//Bottom Left
@@ -130,8 +137,6 @@ public class SPiece extends Tetromino {
 				t4b.setTetromino(this);
 				break;
 			case 3:
-				//x is 120
-				Log.d("Case 3", "x is " + x);
 				//Bottom Left
 				Tile t1c = board.getTileAt(x-TetrisBoard.TILE_DIMEN, y);
 				board.fillBooleanTileAt(x-TetrisBoard.TILE_DIMEN, y);
@@ -155,27 +160,34 @@ public class SPiece extends Tetromino {
 				break;
 		}
 	}
-
+	
+/*THIS IS STILL BROKEN*/
 	@Override
 	public boolean isClearBelow(TetrisBoard board) {
 		float x = s.getX();
 		float y = s.getY();
 		
+		float newX = -1;
+		float newY = -1; 
+		
 		switch (getRotationBy90()) {
 			case 0:
-				Log.d("SPiece isClearBelow", "x is "+x+" y is "+y);
 				x = x-TetrisBoard.TILE_DIMEN;
-				boolean b3;
+				boolean b3 = true;
 				for (int i = 0; i < 3; i++) {
 					if (i == 2) {
-						b3 = board.isBooleanTileFilled(x+(i*TetrisBoard.TILE_DIMEN), y);
+						newX = x+(i*TetrisBoard.TILE_DIMEN);
+						newY = y; 
+						b3 = board.isBooleanTileFilled(x+(i*TetrisBoard.TILE_DIMEN), newY);
 					} else {
 						b3 = board.isBooleanTileFilled(x+(i*TetrisBoard.TILE_DIMEN), y+TetrisBoard.TILE_DIMEN);
 					}
 					if (b3) {
+						Log.d("S piece is is filled at ", "Current block is " + String.valueOf(i)+" and newY is "+String.valueOf(newY));
 						return false;
 					}
-				}
+				} 
+				
 				
 			case 1:
 
