@@ -6,9 +6,11 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.Entity;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
@@ -44,22 +46,16 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	private int mLevel = 1;
 	
 	public PhysicsWorld physicsWorld;
-	public Entity grid;
+	public ButtonSprite grid;
 	Tetromino tetrisPiece;
 	final TetrisBoard board;
-
+	
+	Entity mPauseButton;
 	public Sprite currentPiece;
 	
 	private boolean mIsPaused = false;
 	
 	private float mGamePace = 0.5f;
-	
-	public PlayScene getPlayScene() {
-		if (scene == null) {
-			scene = new PlayScene();
-		}
-		return scene;
-	}
 	
 	public PlayScene() {
 		
@@ -69,7 +65,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 		physicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
 		
 		board = new TetrisBoard(this);
-
+		
 		addNewPiece();
 		
 		mUpdateHandler = new IUpdateHandler() {
@@ -96,6 +92,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 						//remove and redraw
 						detachChildren();
 						board.drawGrid(Blocs.getSharedInstance().mCurrentScene);
+						createPauseButton();
 						
 						addNewPiece();
 					}
@@ -112,6 +109,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 		createHUD();
 		
 		Blocs.getSharedInstance().setCurrentScene(this);
+		
 		setOnSceneTouchListener(this);
 	}
 	
@@ -148,14 +146,38 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	}
 	
 	private void createPauseButton() {
+		mPauseButton = new Entity(TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN, TetrisBoard.BOTTOM_Y+TetrisBoard.TILE_DIMEN*1.5f) ;//new Entity(TetrisBoard.BOTTOM_Y, TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN);
 		
+		Rectangle firstRectangle = new Rectangle(0, 0, 10, 35, Blocs.getSharedInstance().getVertexBufferObjectManager()) {
+			
+		      @Override
+		      public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+		         //pauseGame();
+		    	  Log.d("CLICK", "PAUSE AREA CLICK");	
+		         return true;
+		
+		      }
+			
+			};
+		firstRectangle.setColor(0f, 0f, 0f);
+		Rectangle secondRectangle = new Rectangle(20, 0, 10, 35, Blocs.getSharedInstance().getVertexBufferObjectManager());
+
+		secondRectangle.setColor(0f, 0f, 0f);
+		mPauseButton.attachChild(firstRectangle);
+		mPauseButton.attachChild(secondRectangle);
+		
+		mPauseButton.setZIndex(1000);
+		
+		Blocs.getSharedInstance().mCurrentScene.attachChild(mPauseButton);
 	}
 	
 	private void pauseGame() {
 		if (!mIsPaused) {
 			this.unregisterUpdateHandler(mUpdateHandler);
+			mIsPaused = true;
 		} else {
 			this.registerUpdateHandler(mUpdateHandler);
+			mIsPaused = false;
 		}
 	}
 	
@@ -178,9 +200,11 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	{
 		
 	    if (pSceneTouchEvent.isActionDown())
-	    {
+	    {	
+	    	float originY = pSceneTouchEvent.getY();
 	    	originX = pSceneTouchEvent.getX(); //the initial X
 	    	startTime = pSceneTouchEvent.getMotionEvent().getEventTime(); //for calculating delta tie
+	    	
 	    	if (!mFirstTouch) {
 	    		mFirstTouch = true;
 	    	} else {
@@ -190,11 +214,22 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	    		}
 	    		mFirstTouch = false;
 	    	}
+	    	
+	    	//PAUSE BUTTON TOUCH AREA DETECTOR
+	    	if (originX > TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN 
+	    			&& originX < TetrisBoard.RIGHT_X
+	    			&& originY > TetrisBoard.BOTTOM_Y+TetrisBoard.TILE_DIMEN*1.5f
+	    			&& originY < TetrisBoard.BOTTOM_Y + TetrisBoard.TILE_DIMEN*2.5f) {
+	    		Log.d("CLICK", "PAUSE CLICKED!!!!!");
+	    		pauseGame();
+	    	}
+	    
+	    
 	    } else if (pSceneTouchEvent.isActionMove()) {
 			float deltaX = pSceneTouchEvent.getX() - originX;
     		int tilesMoved = Math.round(deltaX/MOVE_TOUCH_THRESHOLD);
     	
-    		if (tetrisPiece != null && tilesMoved != 0) {
+    		if (tetrisPiece != null && tilesMoved != 0 && !mIsPaused) {
     			distanceMove = (TetrisBoard.TILE_DIMEN * tilesMoved);
     			
     			if (currentPiece.getX() + distanceMove <= TetrisBoard.LEFT_X) {
@@ -214,10 +249,8 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 			float deltaTime = pSceneTouchEvent.getMotionEvent().getEventTime() - startTime;
 			//Log.d("playScene", "UP! "+String.valueOf(deltaTime));
 			if( deltaTime <= TAP_TOUCH_THRESHOLD ) {
-				if (currentPiece.getX() - tetrisPiece.getOrigHeight() + TetrisBoard.TILE_DIMEN >= TetrisBoard.LEFT_X) {
+				if (!mIsPaused && currentPiece.getX() - tetrisPiece.getOrigHeight() + TetrisBoard.TILE_DIMEN >= TetrisBoard.LEFT_X) {
 					tetrisPiece.rotate90CW();
-				} else {
-					
 				}
 			}
 		};
