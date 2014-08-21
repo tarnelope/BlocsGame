@@ -48,10 +48,14 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	public PhysicsWorld physicsWorld;
 	public ButtonSprite grid;
 	Tetromino tetrisPiece;
+	Tetromino nextTetrisPiece;
+	private int mNextPieceIndex;
+	
 	final TetrisBoard board;
 	
 	private Entity mPauseButton;
 	public Sprite currentPiece;
+	public Sprite nextPiece;
 	
 	private boolean mIsPaused = false;
 	
@@ -248,11 +252,12 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
     		
 		} else if (pSceneTouchEvent.isActionUp()) { //End of touch event
 			float deltaTime = pSceneTouchEvent.getMotionEvent().getEventTime() - startTime;
-			//Log.d("playScene", "UP! "+String.valueOf(deltaTime));
 			if( deltaTime <= TAP_TOUCH_THRESHOLD ) {
 				if (!mIsPaused 
 						&& currentPiece.getX() - tetrisPiece.getOrigHeight() + TetrisBoard.TILE_DIMEN >= TetrisBoard.LEFT_X
-						&& originY < TetrisBoard.BOTTOM_Y) {
+						&& originY < TetrisBoard.BOTTOM_Y
+						&& originX > TetrisBoard.LEFT_X
+						&& originX < TetrisBoard.RIGHT_X) {
 					tetrisPiece.rotate90CW();
 				}
 			}
@@ -262,34 +267,55 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	}
 	
 	public void addNewPiece() {
-		int randomPiece = randInt(0, 4);
-		switch(5) {
-			case 0:
-				tetrisPiece = new LogPiece();
-				break;
-			case 1:
-				tetrisPiece = new SquarePiece();
-				break;
-			case 2:
-				tetrisPiece = new TPiece();
-				break;
-			case 3:
-				tetrisPiece = new JPiece();
-				break;
-			case 4:
-				tetrisPiece = new LPiece();
-				break;
-			case 5:
-				tetrisPiece = new SPiece();
-				break;
-			case 6:
-				tetrisPiece = new ZPiece();
-				break;
-			default:
-				tetrisPiece = new LogPiece();
+		int randomNum = randInt(0, 4);
+		
+		
+		if (nextPiece == null) {
+			tetrisPiece = selectPiece(5); //randomNum will go here
+			
+		} else {
+			tetrisPiece = selectPiece(mNextPieceIndex);
+			//currentPiece.setPosition(TetrisBoard.LEFT_X+4*TetrisBoard.TILE_DIMEN, TetrisBoard.TOP_Y-TetrisBoard.TILE_DIMEN);
 		}
 		currentPiece = tetrisPiece.getPiece();
+		
+		mNextPieceIndex = randInt(0, 4);
+		nextTetrisPiece = selectPiece(mNextPieceIndex);
+		nextPiece = nextTetrisPiece.getPiece();
+		nextPiece.setPosition(TetrisBoard.RIGHT_X + TetrisBoard.TILE_DIMEN/2, 5*TetrisBoard.TILE_DIMEN);
+		nextPiece.setScale(0.75f);
+		
 		attachChild(currentPiece);
+		attachChild(nextPiece);
+		
+	}
+	
+	private Tetromino selectPiece(int randomNum) {
+		switch(randomNum) {
+			case 0:
+				return new LogPiece();
+
+			case 1:
+				return new SquarePiece();
+
+			case 2:
+				return new TPiece();
+
+			case 3:
+				return new JPiece();
+
+			case 4:
+				return new LPiece();
+
+			case 5:
+				return new SPiece();
+			
+			case 6:
+				return new ZPiece();
+				
+			default:
+				return new LogPiece();
+		}
 	}
 	
 	public static int randInt(int min, int max) {
