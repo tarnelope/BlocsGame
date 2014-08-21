@@ -188,7 +188,6 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	long startTime = 0;
 	
 	private float originX = 0.0f;
-	private float originY = 0.0f;
 	private static final float MOVE_TOUCH_THRESHOLD = 50;
 	private static final long TAP_TOUCH_THRESHOLD = 75;
 	private float distanceMove = 0.0f;
@@ -202,7 +201,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 		
 	    if (pSceneTouchEvent.isActionDown())
 	    {	
-	    	originY = pSceneTouchEvent.getY();
+	    	float originY = pSceneTouchEvent.getY();
 	    	originX = pSceneTouchEvent.getX(); //the initial X
 	    	startTime = pSceneTouchEvent.getMotionEvent().getEventTime(); //for calculating delta tie
 	    	
@@ -252,7 +251,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 			if( deltaTime <= TAP_TOUCH_THRESHOLD ) {
 				if (!mIsPaused 
 						&& currentPiece.getX() - tetrisPiece.getOrigHeight() + TetrisBoard.TILE_DIMEN >= TetrisBoard.LEFT_X
-						&& originY < TetrisBoard.BOTTOM_Y) {
+						&& currentPiece.getY() < TetrisBoard.BOTTOM_Y) {
 					tetrisPiece.rotate90CW();
 				}
 			}

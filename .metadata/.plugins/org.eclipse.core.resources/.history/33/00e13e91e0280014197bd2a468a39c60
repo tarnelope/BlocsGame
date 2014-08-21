@@ -252,7 +252,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 			if( deltaTime <= TAP_TOUCH_THRESHOLD ) {
 				if (!mIsPaused 
 						&& currentPiece.getX() - tetrisPiece.getOrigHeight() + TetrisBoard.TILE_DIMEN >= TetrisBoard.LEFT_X
-						&& originY < TetrisBoard.BOTTOM_Y) {
+						&& originY() < TetrisBoard.BOTTOM_Y) {
 					tetrisPiece.rotate90CW();
 				}
 			}
