@@ -60,6 +60,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	private boolean mIsPaused = false;
 	
 	private float mGamePace = 0.5f;
+	private float mOrigPace = 0.5f;
 	
 	public PlayScene() {
 		
@@ -126,9 +127,14 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 		mHud.attachChild(mLevelText);
 		
 		//Create SCORE text
-		mScoreText = new Text(TetrisBoard.LEFT_X + TetrisBoard.BOARD_WIDTH/3, TetrisBoard.BOTTOM_Y + 2*TetrisBoard.TILE_DIMEN, Blocs.getSharedInstance().getFont(), "Score: 0", "Level: 100".length(), Blocs.getSharedInstance().getVertexBufferObjectManager());
+		mScoreText = new Text(TetrisBoard.LEFT_X + TetrisBoard.BOARD_WIDTH/3, TetrisBoard.BOTTOM_Y + 2*TetrisBoard.TILE_DIMEN, Blocs.getSharedInstance().getFont(), "Level: 0", "Level: 100".length(), Blocs.getSharedInstance().getVertexBufferObjectManager());
 		mScoreText.setText("Score: 0   ");
 		mHud.attachChild(mScoreText);
+		
+		//Create NEXT PIECE text
+		Text nextPieceText = new Text(TetrisBoard.RIGHT_X + TetrisBoard.BOARD_WIDTH/2, 4.5f*TetrisBoard.TILE_DIMEN, Blocs.getSharedInstance().getFont(), "Next Piece:", "Next Piece:".length(), Blocs.getSharedInstance().getVertexBufferObjectManager());
+		nextPieceText.setText("Next Piece:");
+		mHud.attachChild(nextPieceText);
 		
 		mCamera.setHUD(mHud);
 	}
@@ -197,8 +203,6 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	private static final long TAP_TOUCH_THRESHOLD = 75;
 	private float distanceMove = 0.0f;
 	
-	boolean mFirstTouch = false;
-	private long mGlobalDeltaTime = 0;
 	
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, final TouchEvent pSceneTouchEvent)
@@ -208,17 +212,7 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	    {	
 	    	originY = pSceneTouchEvent.getY();
 	    	originX = pSceneTouchEvent.getX(); //the initial X
-	    	startTime = pSceneTouchEvent.getMotionEvent().getEventTime(); //for calculating delta tie
-	    	
-	    	if (!mFirstTouch) {
-	    		mFirstTouch = true;
-	    	} else {
-	    		mGlobalDeltaTime -= System.currentTimeMillis();
-	    		if (mGlobalDeltaTime < 1000) {
-	    			Log.d("touch event", mGlobalDeltaTime + " DOUBLE TAP");
-	    		}
-	    		mFirstTouch = false;
-	    	}
+	    	startTime = pSceneTouchEvent.getMotionEvent().getEventTime(); //for calculating delta time
 	    	
 	    	//PAUSE BUTTON TOUCH AREA DETECTOR
 	    	if (originX > TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN 
@@ -232,8 +226,12 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	    
 	    } else if (pSceneTouchEvent.isActionMove()) {
 			float deltaX = pSceneTouchEvent.getX() - originX;
+			float deltaY = pSceneTouchEvent.getY() - originY;
     		int tilesMoved = Math.round(deltaX/MOVE_TOUCH_THRESHOLD);
-    	
+    		
+    		/*
+    		 * For controlling horizontal movement of the tetromino.
+    		 */
     		if (tetrisPiece != null && tilesMoved != 0 && !mIsPaused) {
     			distanceMove = (TetrisBoard.TILE_DIMEN * tilesMoved);
     			
@@ -248,6 +246,12 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
     			}
     			
 				originX += (tilesMoved * MOVE_TOUCH_THRESHOLD); // Move logical origin to prevent large jumps after move
+    		}
+    		
+    		/* Swipe Down to drop piece */
+    		if (deltaY > 100) {
+    			mGamePace = (float) (mOrigPace/1.1)*(mLevel-1);
+    			mGamePace = 0.01f;
     		}
     		
 		} else if (pSceneTouchEvent.isActionUp()) { //End of touch event
@@ -267,8 +271,10 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 	}
 	
 	public void addNewPiece() {
-		int randomNum = randInt(0, 4);
 		
+		mGamePace = mOrigPace;
+		
+		int randomNum = randInt(0, 4);
 		
 		if (nextPiece == null) {
 			tetrisPiece = selectPiece(5); //randomNum will go here
@@ -282,8 +288,8 @@ public class PlayScene extends Scene implements IOnSceneTouchListener {
 		mNextPieceIndex = randInt(0, 4);
 		nextTetrisPiece = selectPiece(mNextPieceIndex);
 		nextPiece = nextTetrisPiece.getPiece();
-		nextPiece.setPosition(TetrisBoard.RIGHT_X + TetrisBoard.TILE_DIMEN/2, 5*TetrisBoard.TILE_DIMEN);
-		nextPiece.setScale(0.75f);
+		nextPiece.setPosition(TetrisBoard.RIGHT_X + TetrisBoard.TILE_DIMEN/4, 5*TetrisBoard.TILE_DIMEN);
+		nextPiece.setScale(0.65f);
 		
 		attachChild(currentPiece);
 		attachChild(nextPiece);

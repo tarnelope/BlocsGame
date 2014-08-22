@@ -1,0 +1,350 @@
+package com.bloc.blocs;
+
+import java.util.Random;
+
+import org.andengine.engine.camera.Camera;
+import org.andengine.engine.camera.hud.HUD;
+import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.entity.Entity;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.sprite.ButtonSprite;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
+import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.input.touch.TouchEvent;
+import org.andengine.input.touch.detector.SurfaceGestureDetector;
+
+import Tetrominos.JPiece;
+import Tetrominos.LPiece;
+import Tetrominos.LogPiece;
+import Tetrominos.SPiece;
+import Tetrominos.SquarePiece;
+import Tetrominos.TPiece;
+import Tetrominos.Tetromino;
+import Tetrominos.ZPiece;
+import android.hardware.SensorManager;
+import android.util.Log;
+
+import com.badlogic.gdx.math.Vector2;
+
+
+
+public class PlayScene extends Scene implements IOnSceneTouchListener {
+	
+	Camera mCamera;
+	SurfaceGestureDetector gDetector;
+	PlayScene scene;
+	private IUpdateHandler mUpdateHandler;
+	
+	private HUD mHud;
+	private Text mScoreText;
+	private int mScore = 0;
+	private Text mLevelText;
+	private int mLevel = 1;
+	
+	public PhysicsWorld physicsWorld;
+	public ButtonSprite grid;
+	Tetromino tetrisPiece;
+	Tetromino nextTetrisPiece;
+	private int mNextPieceIndex;
+	
+	final TetrisBoard board;
+	
+	private Entity mPauseButton;
+	public Sprite currentPiece;
+	public Sprite nextPiece;
+	
+	private boolean mIsPaused = false;
+	
+	private float mGamePace = 0.5f;
+	private float mOrigPace = 0;
+	
+	public PlayScene() {
+		
+		setBackground(new Background(0.1f, 0.6f, 0.134f));
+		mCamera = Blocs.getSharedInstance().mCamera;
+		
+		physicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
+		
+		board = new TetrisBoard(this);
+		
+		addNewPiece();
+		
+		mUpdateHandler = new IUpdateHandler() {
+			
+			@Override
+			public void reset() {
+			}
+			
+			float counter = 0;
+			@Override
+			public void onUpdate(float pSecondsElapsed) {
+				counter += pSecondsElapsed;
+				if (currentPiece != null ) {
+					if (!tetrisPiece.isClearBelow(board)) {
+						tetrisPiece.setMoveable(false);
+						currentPiece.setPosition(currentPiece.getX(), currentPiece.getY());
+						Log.d("onUpdate", "y is " + currentPiece.getY() + " x is "+currentPiece.getX());
+						//set tiles as filled 
+						tetrisPiece.fillTiles(board);
+						//check for filled row
+						board.checkRows();
+						//update grid
+						board.updateBooleanGrid();
+						//remove and redraw
+						detachChildren();
+						board.drawGrid(Blocs.getSharedInstance().mCurrentScene);
+						createPauseButton();
+						
+						addNewPiece();
+					}
+					if (counter > mGamePace && tetrisPiece.isMoveable) {
+						counter = 0;
+						currentPiece.setPosition(currentPiece.getX(), currentPiece.getY()+TetrisBoard.TILE_DIMEN);
+					}
+				}
+			}
+		};
+	
+		registerUpdateHandler(mUpdateHandler);
+		
+		createHUD();
+		
+		Blocs.getSharedInstance().setCurrentScene(this);
+		
+		setOnSceneTouchListener(this);
+	}
+	
+	private void createHUD() {
+		mHud = new HUD();
+		
+		//Create LEVEL text
+		mLevelText = new Text(TetrisBoard.LEFT_X, TetrisBoard.TOP_Y - TetrisBoard.TILE_DIMEN, Blocs.getSharedInstance().getFont(), "Score: 0", "Score: 1000".length(), Blocs.getSharedInstance().getVertexBufferObjectManager());
+		mLevelText.setText("Level: "+mLevel);
+		mHud.attachChild(mLevelText);
+		
+		//Create SCORE text
+		mScoreText = new Text(TetrisBoard.LEFT_X + TetrisBoard.BOARD_WIDTH/3, TetrisBoard.BOTTOM_Y + 2*TetrisBoard.TILE_DIMEN, Blocs.getSharedInstance().getFont(), "Level: 0", "Level: 100".length(), Blocs.getSharedInstance().getVertexBufferObjectManager());
+		mScoreText.setText("Score: 0   ");
+		mHud.attachChild(mScoreText);
+		
+		//Create NEXT PIECE text
+		Text nextPieceText = new Text(TetrisBoard.RIGHT_X + TetrisBoard.BOARD_WIDTH/2, 4.5f*TetrisBoard.TILE_DIMEN, Blocs.getSharedInstance().getFont(), "Next Piece:", "Next Piece:".length(), Blocs.getSharedInstance().getVertexBufferObjectManager());
+		nextPieceText.setText("Next Piece:");
+		mHud.attachChild(nextPieceText);
+		
+		mCamera.setHUD(mHud);
+	}
+	
+	/*
+	 * addToScore(int i) 
+	 * - Increases the score by 10 for every row cleared.
+	 * - Increases game speed by 10% for every 100 points or 10 rows cleared. When this
+	 *   happens, level is increased.
+	 */
+	public void addToScore(int i) {
+		mScore += i;
+		if (mScore % 100 == 0) {
+			mGamePace = mGamePace/1.1f;
+			mLevel++;
+			mLevelText.setText("Level: "+mLevel);
+		}
+		mScoreText.setText("Score: "+mScore);
+	}
+	
+	private void createPauseButton() {
+		mPauseButton = new Entity(TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN, TetrisBoard.BOTTOM_Y+TetrisBoard.TILE_DIMEN*1.5f) ;//new Entity(TetrisBoard.BOTTOM_Y, TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN);
+		
+		Rectangle firstRectangle = new Rectangle(0, 0, 10, 35, Blocs.getSharedInstance().getVertexBufferObjectManager()) {
+			
+		      @Override
+		      public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+		         //pauseGame();
+		    	  Log.d("CLICK", "PAUSE AREA CLICK");	
+		         return true;
+		
+		      }
+			
+			};
+		firstRectangle.setColor(0f, 0f, 0f);
+		Rectangle secondRectangle = new Rectangle(20, 0, 10, 35, Blocs.getSharedInstance().getVertexBufferObjectManager());
+
+		secondRectangle.setColor(0f, 0f, 0f);
+		mPauseButton.attachChild(firstRectangle);
+		mPauseButton.attachChild(secondRectangle);
+		
+		mPauseButton.setZIndex(1000);
+		
+		Blocs.getSharedInstance().mCurrentScene.attachChild(mPauseButton);
+	}
+	
+	private void pauseGame() {
+		if (!mIsPaused) {
+			this.unregisterUpdateHandler(mUpdateHandler);
+			mIsPaused = true;
+		} else {
+			this.registerUpdateHandler(mUpdateHandler);
+			mIsPaused = false;
+		}
+	}
+	
+	/*
+	 * Gesture detection related code below
+	 */
+	float origX = TetrisBoard.LEFT_X+TetrisBoard.BOARD_WIDTH/2;
+	long startTime = 0;
+	
+	private float originX = 0.0f;
+	private float originY = 0.0f;
+	private static final float MOVE_TOUCH_THRESHOLD = 50;
+	private static final long TAP_TOUCH_THRESHOLD = 75;
+	private float distanceMove = 0.0f;
+	
+	boolean mFirstTouch = false;
+	private long mGlobalDeltaTime = 0;
+	
+	@Override
+	public boolean onSceneTouchEvent(Scene pScene, final TouchEvent pSceneTouchEvent)
+	{
+		
+	    if (pSceneTouchEvent.isActionDown())
+	    {	
+	    	originY = pSceneTouchEvent.getY();
+	    	originX = pSceneTouchEvent.getX(); //the initial X
+	    	startTime = pSceneTouchEvent.getMotionEvent().getEventTime(); //for calculating delta time
+	    	
+	    	if (!mFirstTouch) {
+	    		mFirstTouch = true;
+	    	} else {
+	    		mGlobalDeltaTime -= System.currentTimeMillis();
+	    		if (mGlobalDeltaTime < 1000) {
+	    			Log.d("touch event", mGlobalDeltaTime + " DOUBLE TAP");
+	    		}
+	    		mFirstTouch = false;
+	    	}
+	    	
+	    	//PAUSE BUTTON TOUCH AREA DETECTOR
+	    	if (originX > TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN 
+	    			&& originX < TetrisBoard.RIGHT_X
+	    			&& originY > TetrisBoard.BOTTOM_Y+TetrisBoard.TILE_DIMEN*1.5f
+	    			&& originY < TetrisBoard.BOTTOM_Y + TetrisBoard.TILE_DIMEN*2.5f) {
+	    		Log.d("CLICK", "PAUSE CLICKED!!!!!");
+	    		pauseGame();
+	    	}
+	    
+	    
+	    } else if (pSceneTouchEvent.isActionMove()) {
+			float deltaX = pSceneTouchEvent.getX() - originX;
+			float deltaY = pSceneTouchEvent.getY() - originY;
+    		int tilesMoved = Math.round(deltaX/MOVE_TOUCH_THRESHOLD);
+    		
+    		/*
+    		 * For controlling horizontal movement of the tetromino.
+    		 */
+    		if (tetrisPiece != null && tilesMoved != 0 && !mIsPaused) {
+    			distanceMove = (TetrisBoard.TILE_DIMEN * tilesMoved);
+    			
+    			if (currentPiece.getX() + distanceMove <= TetrisBoard.LEFT_X) {
+
+    				tetrisPiece.checkLeftBound();
+    			} else if (currentPiece.getX() + distanceMove + tetrisPiece.getOrigWidth() >= TetrisBoard.RIGHT_X) {
+
+    				tetrisPiece.checkRightBound();
+    			} else {
+    				currentPiece.setPosition(currentPiece.getX() + distanceMove, currentPiece.getY());
+    			}
+    			
+				originX += (tilesMoved * MOVE_TOUCH_THRESHOLD); // Move logical origin to prevent large jumps after move
+    		}
+    		
+    		if (deltaY > 100) {
+    			mOrigPace = mGamePace;
+    			mGamePace = 0.01f;
+    		}
+    		
+		} else if (pSceneTouchEvent.isActionUp()) { //End of touch event
+			float deltaTime = pSceneTouchEvent.getMotionEvent().getEventTime() - startTime;
+			if( deltaTime <= TAP_TOUCH_THRESHOLD ) {
+				if (!mIsPaused 
+						&& currentPiece.getX() - tetrisPiece.getOrigHeight() + TetrisBoard.TILE_DIMEN >= TetrisBoard.LEFT_X
+						&& originY < TetrisBoard.BOTTOM_Y
+						&& originX > TetrisBoard.LEFT_X
+						&& originX < TetrisBoard.RIGHT_X) {
+					tetrisPiece.rotate90CW();
+				}
+			}
+		};
+		
+	    return false;
+	}
+	
+	public void addNewPiece() {
+		mGamePace = mOrigPace;
+		
+		int randomNum = randInt(0, 4);
+		
+		if (nextPiece == null) {
+			tetrisPiece = selectPiece(5); //randomNum will go here
+			
+		} else {
+			tetrisPiece = selectPiece(mNextPieceIndex);
+			//currentPiece.setPosition(TetrisBoard.LEFT_X+4*TetrisBoard.TILE_DIMEN, TetrisBoard.TOP_Y-TetrisBoard.TILE_DIMEN);
+		}
+		currentPiece = tetrisPiece.getPiece();
+		
+		mNextPieceIndex = randInt(0, 4);
+		nextTetrisPiece = selectPiece(mNextPieceIndex);
+		nextPiece = nextTetrisPiece.getPiece();
+		nextPiece.setPosition(TetrisBoard.RIGHT_X + TetrisBoard.TILE_DIMEN/4, 5*TetrisBoard.TILE_DIMEN);
+		nextPiece.setScale(0.65f);
+		
+		attachChild(currentPiece);
+		attachChild(nextPiece);
+		
+	}
+	
+	private Tetromino selectPiece(int randomNum) {
+		switch(randomNum) {
+			case 0:
+				return new LogPiece();
+
+			case 1:
+				return new SquarePiece();
+
+			case 2:
+				return new TPiece();
+
+			case 3:
+				return new JPiece();
+
+			case 4:
+				return new LPiece();
+
+			case 5:
+				return new SPiece();
+			
+			case 6:
+				return new ZPiece();
+				
+			default:
+				return new LogPiece();
+		}
+	}
+	
+	public static int randInt(int min, int max) {
+
+	    // NOTE: Usually this should be a field rather than a method
+	    // variable so that it is not re-seeded every call.
+	    Random rand = new Random();
+
+	    // nextInt is normally exclusive of the top value,
+	    // so add 1 to make it inclusive
+	    int randomNum = rand.nextInt((max - min) + 1) + min;
+
+	    return randomNum;
+	}
+
+}

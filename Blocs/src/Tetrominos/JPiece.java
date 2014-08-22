@@ -52,7 +52,7 @@ public class JPiece extends Tetromino{
 	}
 	
 	public void checkRightBound() {
-		s.setPosition(TetrisBoard.RIGHT_X-2*TetrisBoard.TILE_DIMEN, s.getY());
+		s.setPosition(TetrisBoard.RIGHT_X-TetrisBoard.TILE_DIMEN, s.getY());
 	}
 	
 	public void fillTiles(TetrisBoard board) {
